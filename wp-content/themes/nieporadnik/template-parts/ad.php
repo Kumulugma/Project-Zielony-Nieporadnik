@@ -36,7 +36,7 @@ $posts = new WP_Query($args);
                                         <div class="blog-post-image">
                                             <?php if (has_post_thumbnail(get_the_ID())): ?>
                                                 <?php $image = wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'sticky'); ?>
-                                                <img class="img-fluid" src="<?php echo $image[0]; ?>" alt="<?php the_title() ?>">
+                                                <img class="img-fluid mx-auto" src="<?php echo $image[0]; ?>" alt="<?php the_title() ?>">
                                             <?php endif; ?>
                                         </div>
                                         <div class="blog-content">
@@ -51,7 +51,7 @@ $posts = new WP_Query($args);
                                             </div>
                                             <div class="blog-post-footer blog-post-categorise">
                                                 <div class="blog-post-time">
-                                                    <a href="<?= get_permalink(get_the_ID()) ?>"><i class="far fa-clock"></i>12 Jan 2021</a>
+                                                    <a href="<?= get_permalink(get_the_ID()) ?>"><i class="far fa-clock"></i><?= get_the_date() ?></a>
                                                 </div>
                                             </div>
                                         </div>

@@ -22,26 +22,8 @@ add_action('wp_enqueue_scripts', 'loadmore_scripts');
 
 function loadmore_ajax_handler() {
 
-    $args = [];
-    $args['paged'] = $_POST['page'] + 1; // we need next page to be loaded
-    $args['post_status'] = 'publish';
-    $postsPerPage = get_option('posts_per_page');
-    $postOffset = ($args['paged'] * $postsPerPage) - $postsPerPage;
-    $args['post_type'] = 'post';
-    
-    $args['posts_per_page'] = $postsPerPage;
-    $args['offset'] = $postOffset;
+    echo get_template_part('template-parts/blog/ajax_posts');
 
-    $posts = new WP_Query($args);
-    if ($posts->have_posts()) :
-
-        while ($posts->have_posts()): $posts->the_post();
-
-            echo get_template_part('template-parts/blog/ajax_posts');
-
-        endwhile;
-
-    endif;
     die;
 }
 

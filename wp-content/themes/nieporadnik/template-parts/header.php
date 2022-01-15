@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-12">
         <nav class="navbar navbar-static-top navbar-expand-lg header-sticky justify-content-between">
-          <a class="navbar-brand" href="/"><img class="img-fluid logo" src="<?=get_template_directory_uri()?>/assets/images/logo.svg" alt="<?php bloginfo('name'); ?>"></a>
+          <a class="navbar-brand" href="/"><img class="logo" src="<?=get_template_directory_uri()?>/assets/images/logo.svg" alt="<?php bloginfo('name'); ?>"></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarmenu" aria-controls="navbarmenu" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fas fa-align-left"></i>
           </button>

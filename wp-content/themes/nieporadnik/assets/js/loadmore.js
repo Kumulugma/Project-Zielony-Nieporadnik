@@ -3,6 +3,7 @@ jQuery(function ($) {
 
         var blog_container = jQuery('#blog-container');
         var button_data = jQuery('.loadmore');
+        var posts_loop = jQuery('#posts-loop');
 
         var button = $(this),
                 data = {
@@ -16,13 +17,13 @@ jQuery(function ($) {
             data: data,
             type: 'POST',
             beforeSend: function (xhr) {
-                button.text('Loading...');
+                button.text('Ładowanie...');
             },
             success: function (data) {
                 if (data) {
-                    button.text('More posts').prev().before(data); // insert new posts
+                    button.text('Załaduj więcej').prev().before(data); // insert new posts
                     loadmore_params.current_page++;
-                    blog_container.append(data);
+                    posts_loop.append(data);
                     if (loadmore_params.current_page == button_data.data('max'))
                     {
                         button.remove();

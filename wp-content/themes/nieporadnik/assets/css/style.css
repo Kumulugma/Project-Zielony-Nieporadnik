@@ -2598,8 +2598,7 @@ input[type="radio"]:radio {
   padding: 30px 0px;
   margin-right: 0; }
 
-.navbar-brand img {
-  height: 36px; }
+.navbar-brand img {}
 
 .navbar .navbar-brand {
   color: #ffffff;
@@ -3080,7 +3079,7 @@ input[type="radio"]:radio {
   .header.default.header-transparent .search ul {
     display: none !important; }
   .header.default .navbar-brand img {
-    height: 26px; } }
+    height: 46px; } }
 
 @media (max-width: 575px) {
   .header.default .navbar-toggler {
@@ -3089,7 +3088,7 @@ input[type="radio"]:radio {
   .header.default .navbar-brand {
     padding: 20px 0px; }
     .header.default .navbar-brand img {
-      height: 24px; }
+      height: 44px; }
   .banner.slider-02 {
     padding: 0; } }
 
