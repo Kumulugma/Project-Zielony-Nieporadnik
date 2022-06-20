@@ -2,12 +2,12 @@
 # This file is distributed under the same license as the Plugins - LiteSpeed Cache - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-03-11 08:02:50+0000\n"
+"PO-Revision-Date: 2022-05-23 06:45:57+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"X-Generator: GlotPress/4.0.0-alpha.1\n"
 "Language: pl\n"
 "Project-Id-Version: Plugins - LiteSpeed Cache - Stable (latest release)\n"
 
@@ -42,10 +42,6 @@ msgstr "Użyj usługi QUIC.cloud aby generować unikalne pliki CSS."
 #: src/lang.cls.php:110
 msgid "Generate UCSS"
 msgstr "Wygeneruj UCSS"
-
-#: tpl/toolbox/purge.tpl.php:116
-msgid "Purge the cache entries created by this plugin except for Critical CSS & LQIP caches"
-msgstr "Wyczyść wpisy w pamięci podręcznej utworzone przez ten plugin, z wyjątkiem krytycznych buforów CSS i LQIP"
 
 #: tpl/toolbox/report.tpl.php:41
 msgid "LiteSpeed Report"
@@ -139,19 +135,19 @@ msgstr "Określ maksymalny rozmiar pliku dziennika."
 msgid "To prevent filling up the disk, this setting should be OFF when everything is working."
 msgstr "Aby nie dopuścić do zapełnienia dysku, ustawienie to powinno być wyłączone, gdy wszystko działa."
 
-#: tpl/toolbox/beta_test.tpl.php:52
+#: tpl/toolbox/beta_test.tpl.php:54
 msgid "Press the %s button to stop beta testing and go back to the current release from the WordPress Plugin Directory."
 msgstr "Naciśnij przycisk %s, aby przerwać beta testy i wrócić do aktualnej wersji z WordPress Plugin Directory."
 
-#: tpl/toolbox/beta_test.tpl.php:36 tpl/toolbox/beta_test.tpl.php:52
+#: tpl/toolbox/beta_test.tpl.php:38 tpl/toolbox/beta_test.tpl.php:54
 msgid "Use latest WordPress release version"
 msgstr "Użyj najnowszej wersji z WordPress.org"
 
-#: tpl/toolbox/beta_test.tpl.php:36
+#: tpl/toolbox/beta_test.tpl.php:38
 msgid "OR"
 msgstr "LUB"
 
-#: tpl/toolbox/beta_test.tpl.php:27
+#: tpl/toolbox/beta_test.tpl.php:29
 msgid "Use this section to switch plugin versions. To beta test a GitHub commit, enter the commit URL in the field below."
 msgstr "Ta sekcja służy do przełączania wersji wtyczki. Aby przetestować beta GitHub commit, wpisz adres URL commit w polu poniżej."
 
@@ -452,7 +448,7 @@ msgstr "Aby używać funkcji pamięci podręcznej musisz posiadać Web Server Li
 msgid "Preserve EXIF/XMP data"
 msgstr "Zachowaj dane EXIF/XMP"
 
-#: tpl/toolbox/beta_test.tpl.php:23
+#: tpl/toolbox/beta_test.tpl.php:25
 msgid "Try GitHub Version"
 msgstr "Wypróbuj wersję GitHub"
 
@@ -489,7 +485,7 @@ msgid "Turn On Auto Upgrade"
 msgstr "Włącz automatyczne aktualizacje"
 
 #: tpl/banner/new_version.php:71 tpl/banner/new_version_dev.tpl.php:24
-#: tpl/toolbox/beta_test.tpl.php:60
+#: tpl/toolbox/beta_test.tpl.php:62
 msgid "Upgrade"
 msgstr "Ulepszenie"
 
@@ -785,11 +781,11 @@ msgstr "Krytyczny CSS"
 msgid "Disabling this may cause WordPress tasks triggered by AJAX to stop working."
 msgstr "Wyłączenie tego może spowodować, że zadania WordPress wyzwalane przez AJAX przestaną działać."
 
-#: src/utility.cls.php:249
+#: src/utility.cls.php:236
 msgid "right now"
 msgstr "teraz"
 
-#: src/utility.cls.php:249
+#: src/utility.cls.php:236
 msgid "just now"
 msgstr "właśnie"
 
@@ -1441,11 +1437,11 @@ msgstr "Wyczyść dziennik"
 msgid "To test the cart, visit the <a %s>FAQ</a>."
 msgstr "Aby przetestować ten koszyk, zajrzyj do <a %s>FAQ</a>."
 
-#: src/utility.cls.php:252
+#: src/utility.cls.php:239
 msgid " %s ago"
 msgstr "%s temu"
 
-#: src/media.cls.php:311
+#: src/media.cls.php:315
 msgid "WebP saved %s"
 msgstr "WebP zapisane %s"
 
@@ -1521,7 +1517,7 @@ msgstr "Prywatnie zapisuj pamięć podręczną koszyka jeśli nie jest pusty."
 msgid "Privately Cache Cart"
 msgstr "Prywatna pamięć podręczna koszyka"
 
-#: src/media.cls.php:192
+#: src/media.cls.php:196
 msgid "LiteSpeed Optimization"
 msgstr "Optymizacja LiteSpeed"
 
@@ -1639,7 +1635,7 @@ msgstr "LiteSpeed Cache Image Optimization"
 #: src/admin-display.cls.php:123 src/gui.cls.php:612
 #: tpl/dash/dashboard.tpl.php:55 tpl/dash/network_dash.tpl.php:27
 msgid "Image Optimization"
-msgstr "Optymalizacja obrazów"
+msgstr "Optymalizacja obrazków"
 
 #: src/lang.cls.php:136
 msgid "JS Deferred Excludes"
@@ -3053,8 +3049,8 @@ msgstr "Powiadomiono serwer LiteSpeed w celu oczyszczenia strony głównej."
 msgid "Purge Front Page"
 msgstr "Wyczyść stronę główną"
 
-#: tpl/page_optm/settings_localization.tpl.php:124
-#: tpl/toolbox/beta_test.tpl.php:28
+#: tpl/page_optm/settings_localization.tpl.php:127
+#: tpl/toolbox/beta_test.tpl.php:30
 msgid "Example"
 msgstr "Przykład"
 
