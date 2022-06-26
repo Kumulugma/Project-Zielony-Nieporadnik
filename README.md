@@ -8,6 +8,9 @@
 
 Wersje
 -------------------
+0.0.4a
+- Nowa wersja K3e-Plugin.
+
 0.0.3a
 - Poprawki do lazy-loadera.
 
