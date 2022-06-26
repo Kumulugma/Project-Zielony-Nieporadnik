@@ -18,7 +18,10 @@ class K3E {
         'themeDomain' => ['status' => false, 'name' => 'Domena z tłumaczeniem', 'class' => 'K3eThemeDomain'],
         'documentSeparator' => ['status' => false, 'name' => 'Separator w tytule', 'class' => 'K3eDocumentSeparator'],
         'jQueryDisable' => ['status' => false, 'name' => 'Wyłącz jQuery', 'class' => 'K3eJQueryDisable'],
-        'registerMenu' => ['status' => false, 'name' => 'Zarejestruj menu', 'class' => 'K3eRegisterMenu']
+        'registerMenu' => ['status' => false, 'name' => 'Zarejestruj menu', 'class' => 'K3eRegisterMenu'],
+        'placeholders' => ['status' => false, 'name' => 'Zaślepka', 'class' => 'K3ePlaceholder'],
+        'preloader' => ['status' => false, 'name' => 'Preloader', 'class' => 'K3ePreloader'],
+        'lazyLoader' => ['status' => false, 'name' => 'LazyLoader', 'class' => 'K3eLazyLoader']
     ];
     const DEFAULT_THEME_SUPPORT = [
 //        'admin-bar' => ['status' => false, 'name' => 'admin-bar'],

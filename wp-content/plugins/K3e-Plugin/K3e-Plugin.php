@@ -8,7 +8,7 @@
   Author URI: https://www.k3e.pl/
   Text Domain:
   Domain Path:
-  Version: 0.2.2a
+  Version: 0.2.4a
  */
 require_once 'updater/K3eUpdater.php';
 require_once 'K3E.php';
