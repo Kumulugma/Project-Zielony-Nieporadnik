@@ -2,7 +2,7 @@
     <div class="blog-post-image">
         <?php if (has_post_thumbnail($data->ID)): ?>
             <?php $image = wp_get_attachment_image_src(get_post_thumbnail_id($data->ID), 'nieporadnik'); ?>
-            <img class="img-fluid" src="<?php echo $image[0]; ?>" alt="<?php the_title() ?>">
+            <img class="img-fluid lazyload" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo $image[0]; ?>" alt="<?php the_title() ?>">
         <?php endif; ?>
     </div>
     <div class="blog-content">
@@ -21,7 +21,7 @@
 
 
             <div class="blog-post-author">
-                <span><img src="<?= get_avatar_url($data->post_author) ?>" title="<?= $author ?>" alt="<?= $author ?>"> <?= $author ?></span>
+                <span><img class="lazyload" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?= get_avatar_url($data->post_author) ?>" title="<?= $author ?>" alt="<?= $author ?>"> <?= $author ?></span>
             </div>
             <div class="blog-post-time">
                 <a href="<?= get_permalink($data) ?>"><i class="far fa-clock"></i><?= get_the_date() ?></a>

@@ -16,7 +16,7 @@
             </div>
             <div class="col-md-4 text-left text-md-center">
                 <a class="footer-logo" href="/">
-                    <img class="img-fluid logo" src="<?= get_template_directory_uri() ?>/assets/images/logo-white.svg" alt="<?php bloginfo('name'); ?>">
+                    <img class="lazyload img-fluid logo" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?= get_template_directory_uri() ?>/assets/images/logo-white.svg" alt="<?php bloginfo('name'); ?>">
                 </a>
             </div>
             <div class="col-md-4 mt-4 mt-md-0 text-left text-md-end">

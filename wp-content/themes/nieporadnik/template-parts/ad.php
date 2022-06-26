@@ -14,7 +14,7 @@ $posts = new WP_Query($args);
         <div class="row">
             <div class="col-md-4 mb-4 mb-md-0">
                 <div class="advertise bg-overlay-black-50 bg-holder text-center h-100 align-items-center" style="background-image: url(<?= get_template_directory_uri() ?>/assets/images/about/05.jpg);">
-                    <a href="https://carni24.pl"><img class="img-fluid" src="<?= get_template_directory_uri() ?>/assets/images/ads/ad.png" alt="Reklama"></a>
+                    <a href="https://carni24.pl"><img class="img-fluid lazyload" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?= get_template_directory_uri() ?>/assets/images/ads/ad.png" alt="Reklama"></a>
                 </div>
             </div>
             <div class="col-md-8">
@@ -36,7 +36,7 @@ $posts = new WP_Query($args);
                                         <div class="blog-post-image">
                                             <?php if (has_post_thumbnail(get_the_ID())): ?>
                                                 <?php $image = wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'sticky'); ?>
-                                                <img class="img-fluid mx-auto" src="<?php echo $image[0]; ?>" alt="<?php the_title() ?>">
+                                                <img class="img-fluid mx-auto lazyload" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo $image[0]; ?>" alt="<?php the_title() ?>">
                                             <?php endif; ?>
                                         </div>
                                         <div class="blog-content">

@@ -15,4 +15,5 @@
         <!-- Favicons -->
         <meta name="theme-color" content="#7952b3">
     </head>
-    <body>
+    <body <?php body_class(); ?>>
+    <?php wp_body_open(); ?>
