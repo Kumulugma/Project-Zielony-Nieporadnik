@@ -1,14 +1,14 @@
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
     <header class="mb-auto">
         <div>
-            <a href="<?=get_site_url()?>" id="main-logo" ><h3 class="float-md-start mb-0"><?= unserialize(get_option('k3e_placeholder_name')) ?></h3></a>
-            <?php $tabs = unserialize(get_option('k3e_placeholders')); ?>
+            <a href="<?=get_site_url()?>" id="main-logo" ><h3 class="float-md-start mb-0"><?= unserialize(get_option(K3E::OPTION_PLACEHOLDER_NAME)) ?></h3></a>
+            <?php $tabs = unserialize(get_option(K3E::OPTION_PLACEHOLDERS)); ?>
             <?php
             $tab1 = 0;
             $tab2 = 0;
             ?>
             <nav class="nav nav-masthead justify-content-center float-md-end">
-                <?php for ($i = 0; $i < unserialize(get_option('k3e_placeholder_amount')); $i++) { ?>
+                <?php for ($i = 0; $i < unserialize(get_option(K3E::OPTION_PLACEHOLDER_AMOUNT)); $i++) { ?>
                     <?php if ($tabs[$i]['active'] == 1) { ?> 
                         <a class="nav-link <?= $tab1 == 0 ? 'active' : '' ?>" id="tab-<?= strtolower($tabs[$i]['headling']) ?>-tab" data-bs-toggle="tab" data-bs-target="#tab-<?= strtolower($tabs[$i]['headling']) ?>" role="tab" aria-controls="tab-<?= strtolower($tabs[$i]['headling']) ?>" aria-selected="true"><?= $tabs[$i]['headling'] ?></a>
                         <?php $tab1++; ?>
@@ -20,7 +20,7 @@
 
     <main class="px-3">
         <div class="tab-content" id="TabsContent">
-            <?php for ($i = 0; $i < unserialize(get_option('k3e_placeholder_amount')); $i++) { ?>
+            <?php for ($i = 0; $i < unserialize(get_option(K3E::OPTION_PLACEHOLDER_AMOUNT)); $i++) { ?>
                 <?php if ($tabs[$i]['active'] == 1) { ?> 
                     <div class="tab-pane fade show <?= $tab2 == 0 ? 'active' : '' ?>" id="tab-<?= strtolower($tabs[$i]['headling']) ?>" role="tabpanel" aria-labelledby="<?= strtolower($tabs[$i]['headling']) ?>-tab">
                         <h1><?= $tabs[$i]['headling'] ?></h1>
@@ -37,6 +37,6 @@
     </main>
 
     <footer class="mt-auto text-white-50">
-        <p>Wspierane przez <a href="https://k3e.pl/" class="text-white">K3e.pl</a></p>
+        <p><?=__('Wspierane przez ', 'k3e')?><a href="https://k3e.pl/" class="text-white">K3e.pl</a></p>
     </footer>
 </div>

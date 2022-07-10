@@ -8,15 +8,15 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Nazwa</th>
-                        <th>Szerokość</th>
-                        <th>Wysokość</th>
-                        <th>Przycięcie</th>
+                        <th><?=__('Nazwa', 'k3e')?></th>
+                        <th><?=__('Szerokość', 'k3e')?></th>
+                        <th><?=__('Wysokość', 'k3e')?></th>
+                        <th><?=__('Przycięcie', 'k3e')?></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach (K3eThumbnails::thumbnails() as $thumbnail_name => $thumbnail_args) { ?>
+                    <?php foreach (K3eThumbnails::getThumbnails() as $thumbnail_name => $thumbnail_args) { ?>
                         <tr>
                             <td>
                                 <input type="text" name="Thumbnail[<?= $thumbnail_name ?>][name]" class="regular-text ltr" value="<?= $thumbnail_args['name'] ?>"/> 
@@ -29,11 +29,11 @@
                             </td>
                             <td>
                                 <select name="Thumbnail[<?= $thumbnail_name ?>][crop]">
-                                    <option value="1" <?= $thumbnail_args['crop'] == '1' ? "selected" : "" ?>>Tak</option>
-                                    <option value="0" <?= $thumbnail_args['crop'] == '0' ? "selected" : "" ?>>Nie</option>
+                                    <option value="1" <?= $thumbnail_args['crop'] == '1' ? "selected" : "" ?>><?=__('Tak', 'k3e')?></option>
+                                    <option value="0" <?= $thumbnail_args['crop'] == '0' ? "selected" : "" ?>><?=__('Nie', 'k3e')?></option>
                                 </select>
                             </td>
-                            <td><button class="button button-secondary remove-thumbnail">Usuń</button>
+                            <td><button class="button button-secondary remove-thumbnail"><?=__('Usuń', 'k3e')?></button>
                             </td>
                         </tr>
                     <?php } ?>
@@ -42,7 +42,7 @@
                     <tr>
                         <td colspan="5">
                             <hr>
-                            <h5>Dodaj nowy rozmiar miniaturek</h5>
+                            <h5><?=__('Dodaj nowy rozmiar miniaturek', 'k3e')?></h5>
                         </td>
                     </tr>
                     <tr>
@@ -57,8 +57,8 @@
                         </td>
                         <td>    
                             <select name="Thumbnail[new][crop]">
-                                <option value="1">Tak</option>
-                                <option value="0">Nie</option>
+                                <option value="1"><?=__('Tak', 'k3e')?></option>
+                                <option value="0"><?=__('Nie', 'k3e')?></option>
                             </select>
                         </td>
                         <td>    
@@ -67,7 +67,7 @@
                     </tr>
                 </tfoot>
             </table>
-            <button class="button button-primary" type="submit">Zapisz</button>
+            <button class="button button-primary" type="submit"><?=__('Zapisz', 'k3e')?></button>
 
         </form>
     </div>

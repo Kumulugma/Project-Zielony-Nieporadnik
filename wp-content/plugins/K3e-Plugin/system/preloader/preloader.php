@@ -1,12 +1,10 @@
 <?php
 
-class K3ePreloader {
+class K3ePreloader implements InterfaceToggler {
 
-    const VERSION = '0.1a';
+    const VERSION = '0.1b';
 
     function __construct() {
-        $preloader = unserialize(get_option('k3e_preloader'));
-
         if (is_admin()) {
 
             add_action('admin_menu', 'k3e_preloader');
@@ -27,10 +25,8 @@ class K3ePreloader {
             }
 
             K3ePreloader::save();
-        }
-
-        if (get_option('k3e_preloader_activate')) {
-            require_once 'themes/preloader.php';
+        } else {
+            K3ePreloader::run();
         }
     }
 
@@ -38,15 +34,11 @@ class K3ePreloader {
         $save = FALSE;
 
         if (isset($_POST['Preloader'])) {
-            if (isset($_POST['Preloader']['css'])) {
-                $preloaderCss = ($_POST['Preloader']['css']);
-                K3eSystem::setSettings('k3e_preloader_css', ($preloaderCss));
-            }
             if (isset($_POST['Preloader']['activate'])) {
                 $preloaderActivate = ($_POST['Preloader']['activate']);
-                K3eSystem::setSettings('k3e_preloader_activate', $preloaderActivate);
+                K3eSystem::setSettings(K3E::OPTION_PRELOADER_ACTIVATE, $preloaderActivate);
             } else {
-                K3eSystem::setSettings('k3e_preloader_activate', 0);
+                K3eSystem::setSettings(K3E::OPTION_PRELOADER_ACTIVATE, 0);
             }
             $save = TRUE;
         }
@@ -56,19 +48,31 @@ class K3ePreloader {
         }
     }
 
-    public static function getCss() {
-        $preloaderCss = (get_option('k3e_preloader_css'));
-        if (!$preloaderCss) {
-            K3eSystem::setSettings('k3e_preloader_css', "", true);
-            $preloaderCss = "";
+    public static function run() {
+        if (get_option(K3E::OPTION_PRELOADER_ACTIVATE)) {
+            wp_enqueue_script('K3ePreloader', plugin_dir_url(__FILE__) . "_assets/K3ePreloader.js", ['jquery']);
+            wp_enqueue_style('K3ePreloader', plugin_dir_url(__FILE__) . "_assets/K3ePreloader.css");
+
+            // Add code after opening body tag.
+            add_action('wp_body_open', 'k3e_preloader_body_open_code');
+
+            function k3e_preloader_body_open_code() {
+                echo '<div class="preloader-wrapper">';
+                echo '<div class="preloader" class="d-flex justify-content-center">';
+                echo '<div class="spinner-grow" style="width: 5rem; height: 5rem;" role="status">';
+                echo '<span class="visually-hidden">Ładowanie...</span>';
+                echo '</div>';
+                echo '</div>';
+                echo '</div>';
+            }
+
         }
-        return $preloaderCss;
     }
 
     public static function getStatus() {
-        $preloaderActivate = (get_option('k3e_preloader_activate'));
+        $preloaderActivate = (get_option(K3E::OPTION_PRELOADER_ACTIVATE));
         if (!$preloaderActivate) {
-            K3eSystem::setSettings('k3e_preloader_activate', 0, true);
+            K3eSystem::setSettings(K3E::OPTION_PRELOADER_ACTIVATE, 0, true);
             $preloaderActivate = "";
         }
         return $preloaderActivate;

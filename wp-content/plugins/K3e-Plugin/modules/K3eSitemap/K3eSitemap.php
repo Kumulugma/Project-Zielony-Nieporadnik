@@ -25,13 +25,17 @@ class K3eSitemap {
             fclose($template);
 
             $content = '';
+            $onepage = unserialize(get_option(K3E::OPTION_ONEPAGE));
+            if($onepage != 1) {
             foreach ($postsForSitemap as $post) {
                 setup_postdata($post);
                 $postdate = explode(" ", $post->post_modified);
                 $content .= '<url><loc>' . get_permalink($post->ID) . '</loc><lastmod>' .
                         $postdate[0] . '</lastmod></url>';
-            }
+            } }
             $content .= '';
+            $content .= '<url><loc>' . get_site_url() . '</loc><lastmod>'.date('Y-m-d').'</lastmod></url>';
+            
             $contents = str_replace("{links}", $content, $contents);
             $fp = fopen(ABSPATH . 'sitemap.xml', 'w');
             fwrite($fp, $contents);

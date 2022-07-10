@@ -8,13 +8,13 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Nazwa</th>
-                        <th>Slug</th>
+                        <th><?=__('Nazwa', 'k3e')?></th>
+                        <th><?=__('Slug', 'k3e')?></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach (K3eRegisterMenu::loadMenus() as $menu_slug => $menu_args) { ?>
+                    <?php foreach (K3eRegisterMenu::getLoadMenus() as $menu_slug => $menu_args) { ?>
                         <tr>
                             <td>
                                 <input type="text" name="RegisterMenu[<?= $menu_slug ?>][name]" class="regular-text ltr" value="<?= $menu_args['name'] ?>"/> 
@@ -23,7 +23,7 @@
                                 <input type="text" name="RegisterMenu[<?= $menu_slug ?>][slug]" class="regular-text ltr" value="<?= $menu_args['slug'] ?>"/> 
                             </td>
                             <td>
-                                <button class="button button-secondary remove-menu">Usuń</button>
+                                <button class="button button-secondary remove-menu"><?=__('Usuń', 'k3e')?></button>
                             </td>
                         </tr>
                     <?php } ?>
@@ -32,7 +32,7 @@
                     <tr>
                         <td colspan="3">
                             <hr>
-                            <h5>Dodaj nowe Menu</h5>
+                            <h5><?=__('Dodaj nowe Menu', 'k3e')?></h5>
                         </td>
                     </tr>
                     <tr>
@@ -48,7 +48,7 @@
                     </tr>
                 </tfoot>
             </table>
-            <button class="button button-primary" type="submit">Zapisz</button>
+            <button class="button button-primary" type="submit"><?=__('Zapisz', 'k3e')?></button>
 
         </form>
     </div>

@@ -8,18 +8,18 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Wartość</th>
+                        <th><?=__('Wartość', 'k3e')?></th>
                     </tr>
                 </thead>
                 <tbody>
                         <tr>
                             <td>
-                                <input type="text" name="DocumentSeparator" class="regular-text ltr" value="<?= K3eDocumentSeparator::separator() ?>"/> 
+                                <input type="text" name="DocumentSeparator" class="regular-text ltr" value="<?= K3eDocumentSeparator::getSeparator() ?>"/> 
                             </td>
                         </tr>
                 </tbody>
             </table>
-            <button class="button button-primary" type="submit">Zapisz</button>
+            <button class="button button-primary" type="submit"><?=__('Zapisz', 'k3e')?></button>
 
         </form>
     </div>

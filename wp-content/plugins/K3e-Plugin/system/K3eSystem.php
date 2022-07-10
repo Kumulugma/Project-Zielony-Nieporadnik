@@ -49,6 +49,15 @@ class K3eSystem {
                     'stats', //menu slug
                     'k3e_stats_content' //callback function
             );
+
+            add_submenu_page(
+                    'konfiguracja',
+                    'Zaawansowane', //page title
+                    'Zaawansowane', //menu title
+                    'manage_options', //capability,
+                    'k3e_config', //menu slug
+                    'k3e_config_content' //callback function
+            );
         }
 
         function k3e_plugin_content() {
@@ -59,24 +68,36 @@ class K3eSystem {
             include plugin_dir_path(__FILE__) . '_templates/stats.php';
         }
 
+        function k3e_config_content() {
+            include plugin_dir_path(__FILE__) . '_templates/config.php';
+        }
+
         K3eSystem::save();
         K3eSystem::load();
     }
 
     public static function install() {
-        K3eSystem::setSettings('k3e_plugin_install_date', date('Y-m-d G:i:s'), true);
-        K3eSystem::setSettings('k3e_plugin_activate_date', date('Y-m-d G:i:s'));
-        K3eSystem::setSettings('k3e_plugin_modules', serialize(initPlugin::DEFAULT_MODULES), true);
+        K3eSystem::setSettings(K3E::OPTION_PLUGIN_INSTALL_DATE, date('Y-m-d G:i:s'), true);
+        K3eSystem::setSettings(K3E::OPTION_PLUGIN_ACTIVATION_DATE, date('Y-m-d G:i:s'));
     }
 
-    public static function setSettings($name, $value, $oneTime = false, $autoload = 'no') {
-        if (FALSE === get_option($name)) {
-            add_option($name, $value, '', $autoload);
-        } elseif (FALSE === $oneTime) {
-            update_option($name, $value, '', $autoload);
+    public static function uninstall() {
+        K3eSystem::setSettings(K3E::OPTION_PLUGIN_UNINSTALL_DATE, date('Y-m-d G:i:s'), true);
+        K3eSystem::setSettings(K3E::OPTION_PLUGIN_DEACTIVATION_DATE, date('Y-m-d G:i:s'));
+    }
+    
+    public static function load() {
+        $modules = unserialize(get_option(K3E::OPTION_SYSTEM_MODULES));
+        if ($modules) {
+            foreach ($modules as $module_name => $module_args) {
+                if ($module_args['status'] == 1) {
+                    include plugin_dir_path(__FILE__) . $module_name . '/' . $module_name . '.php';
+                    new $module_args['class']();
+                }
+            }
         }
     }
-
+    
     public static function save() {
 
         if (isset($_POST['System'])) {
@@ -89,38 +110,68 @@ class K3eSystem {
                 }
             }
 
-            K3eSystem::setSettings('k3e_system_modules', serialize($form));
+            K3eSystem::setSettings(K3E::OPTION_SYSTEM_MODULES, serialize($form));
+            wp_redirect('admin.php?page=' . $_GET['page']);
+        }
+
+        if (isset($_POST['Config'])) {
+            K3eSystem::setSettings(K3E::OPTION_ONEPAGE, serialize($_POST['Config']['onepage']));
             wp_redirect('admin.php?page=' . $_GET['page']);
         }
     }
 
-    public static function modules() {
-        $checked_modules = unserialize(get_option('k3e_system_modules'));
+    public static function setSettings($name, $value, $oneTime = false, $autoload = 'no') {
+        if (FALSE === get_option($name)) {
+            add_option($name, $value, '', $autoload);
+        } elseif (FALSE === $oneTime) {
+            update_option($name, $value, '', $autoload);
+        }
+    }
+
+    public static function getFullConfig() {
+        $config = [];
+
+        foreach (K3E::FULL_CONFIG as $item) {
+            $config[$item] = get_option($item);
+        }
+        return $config;
+    }
+
+    
+
+    public static function getModules() {
+        $checked_modules = unserialize(get_option(K3E::OPTION_SYSTEM_MODULES));
         $default_modules = K3E::DEFAULT_MODULES;
         $modules = [];
 
         if (!$checked_modules) {
-            K3eSystem::setSettings('k3e_system_modules', serialize(K3E::DEFAULT_MODULES), true);
+            K3eSystem::setSettings(K3E::OPTION_SYSTEM_MODULES, serialize(K3E::DEFAULT_MODULES), true);
             $modules = K3E::DEFAULT_MODULES;
         } else {
-            foreach($default_modules as $module_name => $module_args)
-            {
+            foreach ($default_modules as $module_name => $module_args) {
                 $modules[$module_name] = ['status' => $checked_modules[$module_name]['status'], 'name' => $module_args['name'], 'class' => $module_args['class']];
             }
         }
         return $modules;
     }
 
-    public static function load() {
-        $modules = unserialize(get_option('k3e_system_modules'));
-        if ($modules) {
-            foreach ($modules as $module_name => $module_args) {
-                if ($module_args['status'] == 1) {
-                    include plugin_dir_path(__FILE__) . $module_name . '/' . $module_name . '.php';
-                    new $module_args['class']();
-                }
-            }
-        }
+    public static function getOnePageOption()
+    {
+        return unserialize(get_option(K3E::OPTION_ONEPAGE));
     }
-
+    
+    public static function getThumbnailsOption()
+    {
+        return unserialize(get_option(K3E::OPTION_THUMBNAIL_SIZES));
+    }
+    
+    public static function getHiddenMenusOption()
+    {
+        return unserialize(get_option(K3E::OPTION_HIDE_MENU));
+    }
+    
+    public static function getThemeSupportOption()
+    {
+        return unserialize(get_option(K3E::OPTION_THEME_SUPPORT));
+    }
 }

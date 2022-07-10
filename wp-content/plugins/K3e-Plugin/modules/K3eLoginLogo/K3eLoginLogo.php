@@ -7,7 +7,7 @@ class K3eLoginLogo {
 
     function __construct() {
 
-        function my_custom_login() {
+        function k3e_custom_login() {
             ?>
             <style>
                 /* Body style */
@@ -24,7 +24,7 @@ class K3eLoginLogo {
 
         }
 
-        add_action('login_head', 'my_custom_login');
+        add_action('login_head', 'k3e_custom_login');
     }
 
 }

@@ -3,15 +3,8 @@
 class K3eRegisterMenu {
 
     const VERSION = '0.1a';
-    
-    function __construct() {
-        $register_menu = unserialize(get_option('k3e_register_menu'));
-        if ($register_menu) {
-            foreach ($register_menu as $menu) {
-                register_nav_menus(array($menu['slug'] => $menu['name']));
-            }
-        }
 
+    function __construct() {
         if (is_admin()) {
 
             add_action('admin_menu', 'k3e_register_menu');
@@ -32,6 +25,7 @@ class K3eRegisterMenu {
                 include plugin_dir_path(__FILE__) . '_templates/index.php';
             }
 
+            K3eRegisterMenu::do();
             K3eRegisterMenu::save();
         }
     }
@@ -45,15 +39,24 @@ class K3eRegisterMenu {
                 }
             }
 
-            K3eSystem::setSettings('k3e_register_menu', serialize($form));
+            K3eSystem::setSettings(K3E::OPTION_REGISTER_MENU, serialize($form));
             wp_redirect('admin.php?page=' . $_GET['page']);
         }
     }
 
-    public static function loadMenus() {
-        $register_menu = unserialize(get_option('k3e_register_menu'));
+    public static function do() {
+        $register_menu = unserialize(get_option(K3E::OPTION_REGISTER_MENU));
+        if ($register_menu) {
+            foreach ($register_menu as $menu) {
+                register_nav_menus(array($menu['slug'] => $menu['name']));
+            }
+        }
+    }
+
+    public static function getLoadMenus() {
+        $register_menu = unserialize(get_option(K3E::OPTION_REGISTER_MENU));
         if (!$register_menu) {
-            K3eSystem::setSettings('k3e_register_menu', serialize(K3E::DEFAULT_MENUS), true);
+            K3eSystem::setSettings(K3E::OPTION_REGISTER_MENU, serialize(K3E::DEFAULT_MENUS), true);
             $register_menu = K3E::DEFAULT_MENUS;
         }
         return $register_menu;

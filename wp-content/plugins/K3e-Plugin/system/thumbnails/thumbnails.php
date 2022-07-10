@@ -2,15 +2,9 @@
 
 class K3eThumbnails {
 
-    const VERSION = '0.1a';
-    
+    const VERSION = '0.1b';
+
     function __construct() {
-        $thumbnails = unserialize(get_option('k3e_thumbnail_sizes'));
-        if ($thumbnails) {
-            foreach ($thumbnails as $thumbnail) {
-                add_image_size($thumbnail['name'], $thumbnail['width'], $thumbnail['height'], $thumbnail['crop']);
-            }
-        }
 
         if (is_admin()) {
 
@@ -32,8 +26,10 @@ class K3eThumbnails {
                 include plugin_dir_path(__FILE__) . '_templates/index.php';
             }
 
+            K3eThumbnails::do();
             K3eThumbnails::save();
         }
+        K3eThumbnails::do();
     }
 
     public static function save() {
@@ -45,15 +41,24 @@ class K3eThumbnails {
                 }
             }
 
-            K3eSystem::setSettings('k3e_thumbnail_sizes', serialize($form));
+            K3eSystem::setSettings(K3E::OPTION_THUMBNAIL_SIZES, serialize($form));
             wp_redirect('admin.php?page=' . $_GET['page']);
         }
     }
 
-    public static function thumbnails() {
-        $thumbnails = unserialize(get_option('k3e_thumbnail_sizes'));
+    public static function do() {
+        $thumbnails = unserialize(get_option(K3E::OPTION_THUMBNAIL_SIZES));
+        if ($thumbnails) {
+            foreach ($thumbnails as $thumbnail) {
+                add_image_size($thumbnail['name'], $thumbnail['width'], $thumbnail['height'], $thumbnail['crop']);
+            }
+        }
+    }
+
+    public static function getThumbnails() {
+        $thumbnails = unserialize(get_option(K3E::OPTION_THUMBNAIL_SIZES));
         if (!$thumbnails) {
-            K3eSystem::setSettings('k3e_thumbnail_sizes', serialize(K3E::DEFAULT_THUMBNAILS), true);
+            K3eSystem::setSettings(K3E::OPTION_THUMBNAIL_SIZES, serialize(K3E::DEFAULT_THUMBNAILS), true);
             $thumbnails = K3E::DEFAULT_THUMBNAILS;
         }
         return $thumbnails;

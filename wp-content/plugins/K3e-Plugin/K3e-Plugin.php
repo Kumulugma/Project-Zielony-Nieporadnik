@@ -2,16 +2,17 @@
 
 /*
   Plugin name: K3e - Plugin
-  Plugin URI:
+  Plugin URI: https://www.k3e.pl/
   Description: Przystawka K3e rozszerzająca podstawowe funkcjonalności systemu Wordpress.
   Author: K3e
   Author URI: https://www.k3e.pl/
   Text Domain:
   Domain Path:
-  Version: 0.2.4a
+  Version: 0.2.16a
  */
 require_once 'updater/K3eUpdater.php';
 require_once 'K3E.php';
+require_once 'interfaces/InterfaceToggler.php';
 require_once 'system/K3eSystem.php';
 require_once 'modules/K3eModules.php';
 add_action('init', 'k3e_plugin_init');
@@ -32,13 +33,13 @@ function k3e_plugin_init() {
 }
 
 function k3e_plugin_activate() {
-    
+    K3eSystem::install();
 }
 
 register_activation_hook(__FILE__, 'k3e_plugin_activate');
 
 function k3e_plugin_deactivate() {
-    
+    K3eSystem::uninstall();
 }
 
 register_deactivation_hook(__FILE__, 'k3e_plugin_deactivate');

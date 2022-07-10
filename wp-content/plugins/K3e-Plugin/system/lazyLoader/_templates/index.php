@@ -7,16 +7,11 @@
         <form method="post" action="admin.php?page=lazyloader">
             <fieldset>
                 <p>
-                    <label for="lazyloaderActivate">Uruchom LazyLoader: </label>
+                    <label for="lazyloaderActivate"><?=__('Uruchom LazyLoader: ', 'k3e')?></label>
                     <input type="checkbox" id="lazyloaderActivate" name="LazyLoader[activate]" value="1" <?= (K3eLazyLoader::getStatus() == 1) ? "checked" : "" ?> >
                     <input type="hidden" name="LazyLoader[token]" value="<?=md5(rand(1,255))?>"/>
                 </p>
-
-                <?php /*
-                <label for="lazyloaderClass">Klasa CSS:</label>
-                <input type="text" name="LazyLoader[class]" id="lazyloaderClass" value="<?= K3eLazyLoader::getClass() ?>" />
-                */ ?>
-                <button class="button button-primary" type="submit">Zapisz</button>
+                <button class="button button-primary" type="submit"><?=__('Zapisz', 'k3e')?></button>
             </fieldset>
         </form>
     </div>

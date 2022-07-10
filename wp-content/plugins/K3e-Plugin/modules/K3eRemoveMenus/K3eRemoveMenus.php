@@ -10,7 +10,7 @@ class K3eRemoveMenus {
         if (is_admin()) {
 
             function remove_menus() {
-                $menus = unserialize(get_option('k3e_hide_menu'));
+                $menus = unserialize(get_option(K3E::OPTION_HIDE_MENU));
                 if ($menus) {
                     foreach ($menus as $menu) {
                         remove_menu_page($menu);
@@ -52,13 +52,13 @@ class K3eRemoveMenus {
                 }
             }
 
-            K3eSystem::setSettings('k3e_hide_menu', serialize($form));
+            K3eSystem::setSettings(K3E::OPTION_HIDE_MENU, serialize($form));
             wp_redirect('admin.php?page=' . $_GET['page']);
         }
     }
 
     public static function hide_menus() {
-        $modules = unserialize(get_option('k3e_hide_menu'));
+        $modules = unserialize(get_option(K3E::OPTION_HIDE_MENU));
         if (!$modules) {
             $modules = [];
         }

@@ -8,6 +8,9 @@
 
 Wersje
 -------------------
+0.0.5a
+- Synchronizacja projektu.
+
 0.0.4a
 - Nowa wersja K3e-Plugin.
 

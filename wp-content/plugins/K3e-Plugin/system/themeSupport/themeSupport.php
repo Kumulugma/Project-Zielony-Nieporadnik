@@ -3,15 +3,8 @@
 class K3eThemeSupport {
 
     const VERSION = '0.1a';
-    
-    function __construct() {
-        $support = unserialize(get_option('k3e_theme_support'));
-        if ($support) {
-            foreach ($support as $support_name => $support_args) {
-                add_theme_support($support_name);
-            }
-        }
 
+    function __construct() {
         if (is_admin()) {
 
             add_action('admin_menu', 'k3e_theme_support');
@@ -31,6 +24,7 @@ class K3eThemeSupport {
                 include plugin_dir_path(__FILE__) . '_templates/index.php';
             }
 
+            K3eThemeSupport::do();
             K3eThemeSupport::save();
         }
     }
@@ -46,15 +40,24 @@ class K3eThemeSupport {
                 }
             }
 
-            K3eSystem::setSettings('k3e_theme_support', serialize($form));
+            K3eSystem::setSettings(K3E::OPTION_THEME_SUPPORT, serialize($form));
             wp_redirect('admin.php?page=' . $_GET['page']);
         }
     }
 
-    public static function theme_support() {
-        $modules = unserialize(get_option('k3e_theme_support'));
+    public static function do() {
+        $support = unserialize(get_option(K3E::OPTION_THEME_SUPPORT));
+        if ($support) {
+            foreach ($support as $support_name => $support_args) {
+                add_theme_support($support_name);
+            }
+        }
+    }
+
+    public static function getThemeSupport() {
+        $modules = unserialize(get_option(K3E::OPTION_THEME_SUPPORT));
         if (!$modules) {
-            K3eSystem::setSettings('k3e_theme_support', serialize(K3E::DEFAULT_THEME_SUPPORT), true);
+            K3eSystem::setSettings(K3E::OPTION_THEME_SUPPORT, serialize(K3E::DEFAULT_THEME_SUPPORT), true);
             $modules = K3E::DEFAULT_THEME_SUPPORT;
         }
         return $modules;

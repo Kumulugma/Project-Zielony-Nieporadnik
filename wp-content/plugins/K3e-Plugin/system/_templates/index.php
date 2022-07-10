@@ -10,7 +10,7 @@
                 <div class="card" style="margin:2px">
                     <form method="post" action="admin.php?page=konfiguracja">
                         <fieldset>
-                            <?php foreach (K3eSystem::modules() as $module => $args) { ?>
+                            <?php foreach (K3eSystem::getModules() as $module => $args) { ?>
                                 <p>
                                     <input type="checkbox" id="<?= $module ?>Form" name="System[<?= $module ?>]" value="1" <?= ($args['status'] == 1) ? "checked" : "" ?>>
                                     <label for="<?= $module ?>Form">Funkcjonalność: <?= $args['name'] ?></label>
@@ -26,7 +26,7 @@
                     <table class="widefat importers striped" style="width:100%">
                         <thead><tr><th colspan="2">Moduły systemowe</th></tr></thead>
                         <tbody>
-                            <?php foreach (K3eSystem::modules() as $module => $args) { ?>
+                            <?php foreach (K3eSystem::getModules() as $module => $args) { ?>
                             <tr class="importer-item">
                                 <td class="import-system"><?= $args['name'] ?></td>
                             <td class="desc"><?=class_exists($args['class']) ? $args['class']::VERSION : "<span>Nie załadowane</span>"?></td>

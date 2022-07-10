@@ -1,11 +1,10 @@
 <?php
 
-class K3eLazyLoader {
+class K3eLazyLoader implements InterfaceToggler {
 
     const VERSION = '0.1a';
 
     function __construct() {
-        $preloader = unserialize(get_option('k3e_lazyloader'));
 
         if (is_admin()) {
 
@@ -27,10 +26,8 @@ class K3eLazyLoader {
             }
 
             K3eLazyLoader::save();
-        }
-
-        if (get_option('k3e_lazyloader_activate')) {
-            require_once 'themes/lazyloader.php';
+        } else {
+            K3eLazyLoader::run();
         }
     }
 
@@ -38,15 +35,11 @@ class K3eLazyLoader {
         $save = FALSE;
 
         if (isset($_POST['LazyLoader'])) {
-            if (isset($_POST['LazyLoader']['class'])) {
-                $lazyloaderClass = ($_POST['LazyLoader']['class']);
-                K3eSystem::setSettings('k3e_lazyloader_class', ($lazyloaderClass));
-            }
             if (isset($_POST['LazyLoader']['activate'])) {
                 $lazyloaderActivate = ($_POST['LazyLoader']['activate']);
-                K3eSystem::setSettings('k3e_lazyloader_activate', $lazyloaderActivate);
+                K3eSystem::setSettings(K3E::OPTION_LAZYLOADER_ACTIVATE, $lazyloaderActivate);
             } else {
-                K3eSystem::setSettings('k3e_lazyloader_activate', 0);
+                K3eSystem::setSettings(K3E::OPTION_LAZYLOADER_ACTIVATE, 0);
             }
             $save = TRUE;
         }
@@ -56,19 +49,18 @@ class K3eLazyLoader {
         }
     }
 
-    public static function getClass() {
-        $lazyloaderClass = (get_option('k3e_lazyloader_class'));
-        if (!$lazyloaderClass) {
-            K3eSystem::setSettings('k3e_lazyloader_class', "", true);
-            $lazyloaderClass = "";
+    public static function run() {
+        if (get_option(K3E::OPTION_LAZYLOADER_ACTIVATE)) {
+
+            wp_enqueue_script('Lazy-Load', plugin_dir_url(__FILE__) . "node_modules/lazyload/lazyload.min.js", null, true);
+            wp_enqueue_script('K3eLazyLoader', plugin_dir_url(__FILE__) . "_assets/K3eLazyLoader.js", ['Lazy-Load'], null, true);
         }
-        return $lazyloaderClass;
     }
 
     public static function getStatus() {
-        $lazyloaderActivate = (get_option('k3e_lazyloader_activate'));
+        $lazyloaderActivate = (get_option(K3E::OPTION_LAZYLOADER_ACTIVATE));
         if (!$lazyloaderActivate) {
-            K3eSystem::setSettings('k3e_lazyloader_activate', 0, true);
+            K3eSystem::setSettings(K3E::OPTION_LAZYLOADER_ACTIVATE, 0, true);
             $lazyloaderActivate = "";
         }
         return $lazyloaderActivate;

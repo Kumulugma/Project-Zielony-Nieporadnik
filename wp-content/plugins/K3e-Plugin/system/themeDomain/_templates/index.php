@@ -8,18 +8,18 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Wartość</th>
+                        <th><?=__('Wartość', 'k3e')?></th>
                     </tr>
                 </thead>
                 <tbody>
                         <tr>
                             <td>
-                                <input type="text" name="ThemeDomain" class="regular-text ltr" value="<?= K3eThemeDomain::themeDomain() ?>"/> 
+                                <input type="text" name="ThemeDomain" class="regular-text ltr" value="<?= K3eThemeDomain::getThemeDomain() ?>"/> 
                             </td>
                         </tr>
                 </tbody>
             </table>
-            <button class="button button-primary" type="submit">Zapisz</button>
+            <button class="button button-primary" type="submit"><?=__('Zapisz', 'k3e')?></button>
 
         </form>
     </div>
