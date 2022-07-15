@@ -65,7 +65,7 @@ define( 'WP_CACHE_KEY_SALT', '>F$kZ)[L3cXtnAvd}A/`o.s<d5}|OwN@]mt{l?pfW+`KI|I-c0
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix = 'wp_';
+$table_prefix = 'zn_';
 
 
 
@@ -80,3 +80,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
+//Disable File Edits
+define('DISALLOW_FILE_EDIT', true);
