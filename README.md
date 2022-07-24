@@ -8,6 +8,9 @@
 
 Wersje
 -------------------
+0.0.7a
+- Porządki w repozytorium.
+
 0.0.6a
 - Synchronizacja projektu.
 
