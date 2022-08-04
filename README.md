@@ -1,30 +1,12 @@
 <p align="center">
     <a href="https://k3e.pl" target="_blank">
-        <img src="http://k3e.pl/images/icons/k3e/100x100.png" height="100px">
+        <img src="https://k3e.pl/wp-content/uploads/2022/07/logo-pasek.png" height="80px">
     </a>
-    <h1 align="center">Projekt Zielony Nieporadnik</h1>
-    <br>
 </p>
 
-Wersje
--------------------
-0.0.7a
-- Porządki w repozytorium.
+# K3e - Projekt Zielony-Nieporadnik
 
-0.0.6a
-- Synchronizacja projektu.
-
-0.0.5a
-- Synchronizacja projektu.
-
-0.0.4a
-- Nowa wersja K3e-Plugin.
-
-0.0.3a
-- Poprawki do lazy-loadera.
-
-0.0.2a
-- Dotychczasowe zmiany.
-
-0.0.1a
-- Podstawowa instancja Wordpress.
+------------------
+...
+------------------
+[Wersje](https://k3e.pl/projects/zielony-nieporadnik/)
