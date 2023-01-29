@@ -18,13 +18,13 @@ NOTE: This is main stylesheet of template, This file contains the styling for th
  :: Shortcodes
     - Accordion
     - Button
-		- Counter
-		- Date time Picker
-		- Newsletter
-		- Owl carousel
-		- Range Slider
-		- Select
-		- Tabs
+                - Counter
+                - Date time Picker
+                - Newsletter
+                - Owl carousel
+                - Range Slider
+                - Select
+                - Tabs
  :: Header
    - Header default
    - Header transparent
@@ -85,3 +85,7 @@ NOTE: This is main stylesheet of template, This file contains the styling for th
 
 // Responsive
 @import "responsive";
+
+.wp-block-column{
+    padding: 5px;
+}

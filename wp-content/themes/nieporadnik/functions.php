@@ -10,3 +10,5 @@ include("includes/loadMoreNews.php");
 include("includes/menuLinkClass.php");
 //Post Views
 include("includes/postViews.php");
+
+add_theme_support( 'post-thumbnails' );

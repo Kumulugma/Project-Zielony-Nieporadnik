@@ -22,7 +22,7 @@ $posts = new WP_Query($args);
                 <a href="<?= get_permalink($current_post) ?>">
                     <?php if (has_post_thumbnail($current_post->ID)): ?>
                         <?php $image = wp_get_attachment_image_src(get_post_thumbnail_id($current_post->ID), 'news'); ?>
-                        <img class="img-fluid lazyload" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo $image[0]; ?>" alt="<?php the_title() ?>">
+                        <img class="img-fluid" src="<?php echo $image[0]; ?>" alt="<?php the_title() ?>">
                     <?php endif; ?>
                 </a>
             </div>
