@@ -2,18 +2,18 @@
 # This file is distributed under the same license as the Themes - Twenty Twenty-Two package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-12-27 06:13:19+0000\n"
+"PO-Revision-Date: 2023-03-29 20:41:08+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
-"X-Generator: GlotPress/4.0.0-alpha.3\n"
+"X-Generator: GlotPress/4.0.0-alpha.4\n"
 "Language: pl\n"
 "Project-Id-Version: Themes - Twenty Twenty-Two\n"
 
 #. Description of the theme
 #, gp-priority: high
-msgid "Built on a solidly designed foundation, Twenty Twenty-Two embraces the idea that everyone deserves a truly unique website. The theme’s subtle styles are inspired by the diversity and versatility of birds: its typography is lightweight yet strong, its color palette is drawn from nature, and its layout elements sit gently on the page. The true richness of Twenty Twenty-Two lies in its opportunity for customization. The theme is built to take advantage of the Full Site Editing features introduced in WordPress 5.9, which means that colors, typography, and the layout of every single page on your site can be customized to suit your vision. It also includes dozens of block patterns, opening the door to a wide range of professionally designed layouts in just a few clicks. Whether you’re building a single-page website, a blog, a business website, or a portfolio, Twenty Twenty-Two will help you create a site that is uniquely yours."
+msgid "Built on a solidly designed foundation, Twenty Twenty-Two embraces the idea that everyone deserves a truly unique website. The theme’s subtle styles are inspired by the diversity and versatility of birds: its typography is lightweight yet strong, its color palette is drawn from nature, and its layout elements sit gently on the page. The true richness of Twenty Twenty-Two lies in its opportunity for customization. The theme is built to take advantage of the Site Editor features introduced in WordPress 5.9, which means that colors, typography, and the layout of every single page on your site can be customized to suit your vision. It also includes dozens of block patterns, opening the door to a wide range of professionally designed layouts in just a few clicks. Whether you’re building a single-page website, a blog, a business website, or a portfolio, Twenty Twenty-Two will help you create a site that is uniquely yours."
 msgstr "Zbudowany na solidnie zaprojektowanym fundamencie, Twenty Twenty-Two odzwierciedla ideę, że każdy zasługuje na naprawdę wyjątkową witrynę internetową. Subtelne style motywu inspirowane są różnorodnością i wszechstronnością ptaków: typografia jest lekka, ale mocna, paleta kolorów czerpie z natury, a elementy wyglądu delikatnie układają się na stronie. Prawdziwe bogactwo Twenty Twenty-Two tkwi w możliwościach dostosowania. Motyw został stworzony z myślą o wykorzystaniu funkcji pełnej edycji witryny wprowadzonych w WordPress 5.9, co oznacza, że kolory, typografię i układ każdej strony można dostosować do własnej wizji. Zawiera również dziesiątki wzorów blokowych, otwierając drzwi do szerokiej gamy profesjonalnie zaprojektowanych układów za pomocą zaledwie kilku kliknięć. Niezależnie od tego, czy tworzysz witrynę jednostronicową, bloga, stronę biznesową czy portfolio, Twenty Twenty-Two pomoże stworzyć unikatową witrynę."
 
 #. Theme Name of the theme
@@ -502,16 +502,13 @@ msgid "Title and button header"
 msgstr "Tytuł i nagłówek przycisku"
 
 #: inc/patterns/header-text-only-with-tagline-black-background.php:6
-msgid "Text-only header with tagline and black background"
-msgstr "Nagłówek tekstowy z hasłem i czarnym tłem"
-
-#: inc/patterns/header-text-only-salmon-background.php:6
-msgid "Text-only header with salmon background"
-msgstr "Nagłówek tylko z tekstem i łososiowym tłem"
+msgid "Text-only header with tagline and background"
+msgstr "Nagłówek tekstowy z hasłem i tłem"
 
 #: inc/patterns/header-text-only-green-background.php:6
-msgid "Text-only header with green background"
-msgstr "Nagłówek tekstowy z hasłem i zielonym tłem"
+#: inc/patterns/header-text-only-salmon-background.php:6
+msgid "Text-only header with background"
+msgstr "Nagłówek tekstowy z hasłem i tłem"
 
 #: inc/patterns/header-stacked.php:6
 msgid "Logo and navigation header"
@@ -522,16 +519,16 @@ msgid "Small header with dark background"
 msgstr "Mały nagłówek z ciemnym tłem"
 
 #: inc/patterns/header-logo-navigation-social-black-background.php:6
-msgid "Logo, navigation, and social links header with black background"
-msgstr "Logo, nawigacja i odnośniki mediów społecznościowych w nagłówku z czarnym tłem"
+msgid "Logo, navigation, and social links header with background"
+msgstr "Logo, nawigacja i odnośniki mediów społecznościowych w nagłówku z tłem"
 
 #: inc/patterns/header-logo-navigation-offset-tagline.php:6
 msgid "Logo, navigation, and offset tagline Header"
 msgstr "Logo, nawigacja i przesunięcie hasła w nagłówku"
 
 #: inc/patterns/header-logo-navigation-gray-background.php:6
-msgid "Logo and navigation header with gray background"
-msgstr "Logo i nagłówek nawigacji z szarym tłem "
+msgid "Logo and navigation header with background"
+msgstr "Logo i nagłówek nawigacji z tłem"
 
 #: inc/patterns/header-large-dark.php:24
 #: inc/patterns/hidden-heading-and-bird.php:14
@@ -559,16 +556,16 @@ msgid "Default header"
 msgstr "Domyślny nagłówek"
 
 #: inc/patterns/header-centered-title-navigation-social.php:6
-msgid "Centered header with navigation, social links, and salmon background"
-msgstr "Wyśrodkowany nagłówek z nawigacją, odnośnikami mediów społecznościowych i łososiowym tłem "
+msgid "Centered header with navigation, social links, and background"
+msgstr "Wyśrodkowany nagłówek z nawigacją, odnośnikami mediów społecznościowych i tłem"
 
 #: inc/patterns/header-centered-logo.php:6
 msgid "Header with centered logo"
 msgstr "Nagłówek z logo umieszczonym pośrodku"
 
 #: inc/patterns/header-centered-logo-black-background.php:6
-msgid "Header with centered logo and black background"
-msgstr "Nagłówek z ciemnym tłem i logo umieszczonym pośrodku"
+msgid "Header with centered logo and background"
+msgstr "Nagłówek z tłem i logo umieszczonym pośrodku"
 
 #: inc/patterns/general-wide-image-intro-buttons.php:31
 msgid "Learn More"
