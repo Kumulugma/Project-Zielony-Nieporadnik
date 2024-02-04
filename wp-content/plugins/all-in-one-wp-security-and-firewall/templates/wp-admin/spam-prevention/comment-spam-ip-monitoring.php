@@ -3,16 +3,18 @@
 	<h3 class="hndle"><label for="title"><?php _e('Auto block spammer IPs', 'all-in-one-wp-security-and-firewall'); ?></label></h3>
 	<div class="inside">
 		<?php
-			if ('1' == $aio_wp_security->configs->get_value('aiowps_enable_autoblock_spam_ip') && !class_exists('Akismet')) {
-				$akismet_link = '<a href="https://wordpress.org/plugins/akismet/" target="_blank">Akismet</a>';
-				$info_msg = sprintf(__('This feature has detected that %s is not active. It is highly recommended that you activate the Akismet plugin to make the most of this feature.', 'all-in-one-wp-security-and-firewall'), $akismet_link);
+			if ('1' == $aio_wp_security->configs->get_value('aiowps_enable_autoblock_spam_ip') && '1' != $aio_wp_security->configs->get_value('aiowps_enable_spambot_detecting')) {
+				$comment_spam_detect_link = "<a href='".esc_url(admin_url(sanitize_url(sprintf('admin.php?page=%s&tab=%s', AIOWPSEC_SPAM_MENU_SLUG, 'comment-spam'))))."'>" . __('spam comment detection') . "</a>";
+				$info_msg = sprintf(__('This feature has detected that %s is not active.', 'all-in-one-wp-security-and-firewall'), $comment_spam_detect_link) . ' ' . __('It is highly recommended that you activate to make the most of this feature.', 'all-in-one-wp-security-and-firewall');
 				echo '<div class="aio_orange_box" id="message"><p><strong>'.$info_msg.'</strong></p></div>';
 			}
+			
+			$aiowps_feature_mgr->output_feature_details_badge("auto-block-spam-ips");
 		?>
 		<form action="" method="POST">
 			<div class="aio_blue_box">
 				<?php
-					echo '<p>'.__('This feature allows you to automatically and permanently block IP addresses which have exceeded a certain number of comments labelled as spam.', 'all-in-one-wp-security-and-firewall').'</p>'.'<p>'.__('Comments are usually labelled as spam either by the Akismet plugin or manually by the WP administrator when they mark a comment as "spam" from the WordPress Comments menu.', 'all-in-one-wp-security-and-firewall').'</p>'.'<p><strong>'.__('NOTE: This feature does NOT use the .htaccess file to permanently block the IP addresses so it should be compatible with all web servers running WordPress.', 'all-in-one-wp-security-and-firewall').'</strong></p>';
+					echo '<p>'.__('This feature allows you to automatically and permanently block IP addresses which have exceeded a certain number of spam comments.', 'all-in-one-wp-security-and-firewall').'</p>'.'<p>'.__('Comments are considered spam if the "Spam comment detection" feature is enabled or an administrator manually marks a comment as "spam" from the WordPress Comments menu.', 'all-in-one-wp-security-and-firewall').'</p>'.'<p><strong>'.__('NOTE: This feature does NOT use the .htaccess file to permanently block the IP addresses so it should be compatible with all web servers running WordPress.', 'all-in-one-wp-security-and-firewall').'</strong></p>';
 				?>
 			</div>
 			<?php
@@ -76,7 +78,7 @@
 								echo '<p class="description">'.__('Example 2: Setting this value to "5" will list only those IP addresses which were used to submit 5 spam comments or more on your site.', 'all-in-one-wp-security-and-firewall').'</p>';
 							?>
 						</div>
-					</td> 
+					</td>
 				</tr>
 			</table>
 			<input type="submit" name="aiowps_ip_spam_comment_search" value="<?php _e('Find IP addresses', 'all-in-one-wp-security-and-firewall'); ?>" class="button-primary">
@@ -98,8 +100,8 @@
 		?>
 		<form id="tables-filter" method="get">
 			<!-- For plugins, we also need to ensure that the form posts back to our current page -->
-			<input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']); ?>" />
-			<input type="hidden" name="tab" value="<?php echo esc_attr($_REQUEST['tab']); ?>" />
+			<input type="hidden" name="page" value="<?php echo esc_attr($page); ?>" />
+			<input type="hidden" name="tab" value="<?php echo esc_attr($tab); ?>" />
 			<!-- Now we can render the completed list table -->
 			<?php $spammer_ip_list->display(); ?>
 		</form>

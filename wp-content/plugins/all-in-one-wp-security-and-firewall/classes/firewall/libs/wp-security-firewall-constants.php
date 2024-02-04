@@ -98,11 +98,12 @@ class Constants implements \ArrayAccess, \IteratorAggregate {
 				// Name of the define without the surrounding quotes
 				$name = substr($tokens[$i + self::DEFINE_NAME_OFFSET][self::CONTENT], 1, -1);
 
-				// We need to interpret the data type of the constant's value
+				// Grabs the value of the define
 				$value = $tokens[$i + self::DEFINE_VALUE_OFFSET];
 
 				if (!is_array($value)) continue;
 
+				// We need to interpret the data type of the define's value
 				switch (token_name($value[self::TOKEN])) {
 					case 'T_CONSTANT_ENCAPSED_STRING':
 						$this->constants[$name] = substr($value[self::CONTENT], 1, -1);
@@ -121,6 +122,7 @@ class Constants implements \ArrayAccess, \IteratorAggregate {
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -191,7 +193,7 @@ class Constants implements \ArrayAccess, \IteratorAggregate {
 	 * @throws \Exception - Throws an exception if called to ensure it's read-only.
 	 */
 	#[\ReturnTypeWillChange]
-	public function offsetSet($offset, $value) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+	public function offsetSet($offset, $value) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Needed for ArrayAccess interface but not used by us as we require read-only
 		throw new \Exception('Constants are read-only.');
 	}
 
@@ -203,7 +205,7 @@ class Constants implements \ArrayAccess, \IteratorAggregate {
 	 * @throws \Exception - Throws an exception if called to ensure it's read-only.
 	 */
 	#[\ReturnTypeWillChange]
-	public function offsetUnset($offset) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+	public function offsetUnset($offset) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Needed for ArrayAccess interface but not used by us as we require read-only
 		throw new \Exception('Constants are read-only.');
 	}
 

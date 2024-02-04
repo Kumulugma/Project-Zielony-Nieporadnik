@@ -1,9 +1,14 @@
 <?php
 
+use LLAR\Core\CloudApp;
+use LLAR\Core\Config;
+use LLAR\Core\Helpers;
+use LLAR\Core\LimitLoginAttempts;
+
 if( !defined( 'ABSPATH' ) ) exit();
 
-$active_app = $this->get_option( 'active_app' );
-$active_app = ($active_app === 'custom' && $this->app) ? 'custom' : 'local';
+$active_app = Config::get( 'active_app' );
+$active_app = ( $active_app === 'custom' && LimitLoginAttempts::$cloud_app ) ? 'custom' : 'local';
 
 $wp_locale = str_replace( '_', '-', get_locale() );
 
@@ -15,7 +20,7 @@ $api_stats = false;
 $retries_count = 0;
 if( $active_app === 'local' ) {
 
-	$retries_stats = $this->get_option( 'retries_stats' );
+	$retries_stats = Config::get( 'retries_stats' );
 
 	if( $retries_stats ) {
 		foreach ( $retries_stats as $key => $count ) {
@@ -48,7 +53,7 @@ if( $active_app === 'local' ) {
 
 } else {
 
-	$api_stats = $this->app->stats();
+	$api_stats = LimitLoginAttempts::$cloud_app->stats();
 
 	if( $api_stats && !empty( $api_stats['attempts']['count'] )) {
 
@@ -68,11 +73,15 @@ if( $active_app === 'local' ) {
 	</div>
 	<div class="dashboard-section-1 <?php echo esc_attr( $active_app ); ?>">
 		<div class="info-box-1">
-            <div class="section-title"><?php _e( 'Failed Login Attempts', 'limit-login-attempts-reloaded' ); ?><?php echo $active_app === 'custom' ? '<span class="llar-premium-label"><span class="dashicons dashicons-yes-alt"></span>' . __( 'Premium protection enabled', 'limit-login-attempts-reloaded' ) . '</span>' : ''; ?></div>
+            <div class="section-title"><?php _e( 'Failed Login Attempts', 'limit-login-attempts-reloaded' ); ?>
+                <i class="llar-tooltip" data-text="<?php esc_attr_e( 'Number of failed login attempts for today.', 'limit-login-attempts-reloaded' ); ?>">
+                    <span class="dashicons dashicons-editor-help"></span>
+                </i>
+                <?php echo $active_app === 'custom' ? '<span class="llar-premium-label"><span class="dashicons dashicons-yes-alt"></span>' . __( 'Cloud protection enabled', 'limit-login-attempts-reloaded' ) . '</span>' : ''; ?></div>
             <div class="section-content">
                 <div class="chart">
                     <div class="doughnut-chart-wrap"><canvas id="llar-attack-velocity-chart"></canvas></div>
-                    <span class="llar-retries-count"><?php echo esc_html( LLA_Helpers::short_number( $retries_count ) ); ?></span>
+                    <span class="llar-retries-count"><?php echo esc_html( Helpers::short_number( $retries_count ) ); ?></span>
                 </div>
                 <script type="text/javascript">
 					(function(){
@@ -151,7 +160,7 @@ if( $active_app === 'local' ) {
 					$date_format = trim( get_option( 'date_format' ), ' yY,._:;-/\\' );
 					$date_format = str_replace( 'F', 'M', $date_format );
 
-					$retries_stats = $this->get_option( 'retries_stats' );
+					$retries_stats = Config::get( 'retries_stats' );
 
 					if( is_array( $retries_stats ) && $retries_stats ) {
                         $key = key( $retries_stats );
@@ -273,28 +282,6 @@ if( $active_app === 'local' ) {
         </div>
         <?php endif; ?>
 	</div>
-	<div class="dashboard-section-2" style="display:none;">
-        <div class="info-box-1">
-            <div class="section-title"><?php _e( 'Notifications', 'limit-login-attempts-reloaded' ); ?></div>
-            <ul class="notifications-list">
-                <li><a href="#">12 issues found in most recent scan</a></li>
-                <li><a href="#">Updates are available for WordPress (v5.6) and 10 plugins</a></li>
-            </ul>
-        </div>
-        <div class="info-box-2">
-            <div class="info-box-icon">
-                <span class="dashicons dashicons-rest-api"></span>
-            </div>
-            <div class="info-box-content">
-                <div class="title"><?php _e( 'Multiply Your Protection By Adding More Domains', 'limit-login-attempts-reloaded' ); ?></div>
-                <div class="desc"><?php _e( 'When you upgrade to premium, you can synchronize your IP safelist and blacklist between multiple sites. This is a great way to improve your network performance and slow down future attacks.', 'limit-login-attempts-reloaded' ); ?></div>
-                <div class="actions">
-                    <a href="#"><?php _e( 'Learn More', 'limit-login-attempts-reloaded' ); ?></a>
-                    <a href="#"><?php _e( 'Connect This Site', 'limit-login-attempts-reloaded' ); ?></a>
-                </div>
-            </div>
-        </div>
-    </div>
 	<div class="dashboard-section-3">
         <div class="info-box-1">
             <div class="info-box-icon">
@@ -324,7 +311,7 @@ if( $active_app === 'local' ) {
             </div>
         </div>
     </div>
-    <?php if( $stats_global = LLAR_App::stats_global() ) : ?>
+    <?php if( $stats_global = CloudApp::stats_global() ) : ?>
 	<div class="dashboard-section-4">
         <?php
 		$stats_global_dates = array();
@@ -336,12 +323,15 @@ if( $active_app === 'local' ) {
 			$stats_global_dates[] = date( $date_format, $timest );
 		}
 		
-		$countries_list = LLA_Helpers::get_countries_list();
+		$countries_list = Helpers::get_countries_list();
         ?>
         <div class="info-box-1">
             <div class="section-title">
                 <span><?php _e( 'Failed Login Attempts By Country', 'limit-login-attempts-reloaded' ); ?></span>
-                <span class="section-title-info"><?php _e( 'Global Network (Premium Users)', 'limit-login-attempts-reloaded' ); ?></span>
+                <span class="section-title-info"><?php _e( 'Global Network (Premium Users)', 'limit-login-attempts-reloaded' ); ?>
+                <i class="llar-tooltip" data-text="<?php esc_attr_e( 'Failed logins for all users in the LLAR network.', 'limit-login-attempts-reloaded' ); ?>">
+                    <span class="dashicons dashicons-editor-help"></span>
+                </i></span>
             </div>
             <div class="section-content">
                 <table class="lockouts-by-country-table">
@@ -445,4 +435,4 @@ if( $active_app === 'local' ) {
     <?php endif; ?>
 </div>
 
-<?php require_once( LLA_PLUGIN_DIR . '/views/onboarding-popup.php')?>
+<?php require_once( LLA_PLUGIN_DIR . 'views/onboarding-popup.php')?>

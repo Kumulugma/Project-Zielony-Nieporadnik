@@ -25,6 +25,11 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 		
 		$parent_notice_content = parent::populate_notices_content();
 
+		$sale_description = __('Backup, migrate and restore with Premium.', 'updraftplus');
+		$sale_description .= ' '.__('Backup incremental changes instead of full backups (saving server resources), clone or migrate your site with ease, get more remote storage locations, premium support and more.', 'updraftplus');
+
+		$checkout_html = '<a class="updraft_notice_link" href="https://updraftplus.com/shop/updraftplus-premium/">'.__('checkout', 'updraftplus').'</a>';
+
 		$child_notice_content = array(
 			1 => array(
 				'prefix' => __('UpdraftPlus Premium:', 'updraftplus'),
@@ -51,7 +56,7 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 			3 => array(
 				'prefix' => __('UpdraftPlus Premium:', 'updraftplus'),
 				'title' => __('enhanced remote storage options', 'updraftplus'),
-				'text' => __('Enhanced storage options for Dropbox, Google Drive and S3. Plus many more options.', 'updraftplus'),
+				'text' => __('Enhanced storage options for Dropbox, Google Drive and S3.', 'updraftplus').' '.__('Plus many more options.', 'updraftplus'),
 				'image' => 'addons-images/morestorage.png',
 				'button_link' => 'https://updraftplus.com/landing/updraftplus-premium',
 				'campaign' => 'morestorage',
@@ -84,7 +89,7 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 			6 => array(
 				'prefix' => __('UpdraftPlus Premium:', 'updraftplus'),
 				'title' => __('easily migrate or clone your site in minutes', 'updraftplus'),
-				'text' => __('Copy your site to another domain directly. Includes find-and-replace tool for database references.', 'updraftplus'),
+				'text' => __('Copy your site to another domain directly.', 'updraftplus').' '.__('Includes find-and-replace tool for database references.', 'updraftplus'),
 				'image' => 'addons-images/migrator.png',
 				'button_link' => 'https://updraftplus.com/landing/updraftplus-premium',
 				'campaign' => 'migrator',
@@ -113,7 +118,7 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 				'supported_positions' => $this->anywhere,
 			),
 			'rate' => array(
-				'text' => __("Hey - We noticed UpdraftPlus has kept your site safe for a while.  If you like us, please consider leaving a positive review to spread the word.  Or if you have any issues or questions please leave us a support message", 'updraftplus') . ' <a href="https://wordpress.org/support/plugin/updraftplus/" target="_blank">' . __('here', 'updraftplus') . '.</a><br>' . __('Thank you so much!', 'updraftplus') . '<br><br> - <b>' . __('Team Updraft', 'updraftplus') . '</b><br>',
+				'text' => __('Hey - We noticed UpdraftPlus has kept your site safe for a while.', 'updraftplus').' '.__('If you like us, please consider leaving a positive review to spread the word.', 'updraftplus').' '.__('Or if you have any issues or questions please leave us a support message', 'updraftplus').' <a href="https://wordpress.org/support/plugin/updraftplus/" target="_blank">'.__('here', 'updraftplus').'.</a><br>'.__('Thank you so much!', 'updraftplus').'<br><br> - <b>'.__('Team Updraft', 'updraftplus').'</b><br>',
 				'image' => 'notices/ud_smile.png',
 				'button_link' => 'https://wordpress.org/support/plugin/updraftplus/reviews/?rate=5#new-post',
 				'button_meta' => 'review',
@@ -135,12 +140,11 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 			'social_media' => array(
 				'prefix' => '',
 				'title' => __('UpdraftPlus is on social media - check us out!', 'updraftplus'),
-				'text' => $this->url_start(true, 'twitter.com/updraftplus', true). __('Twitter', 'updraftplus'). $this->url_end(true, 'twitter.com/updraftplus', true).
+				'text' => $this->url_start(true, 'twitter.com/updraftplus', true).__('Twitter', 'updraftplus').$this->url_end(true, 'twitter.com/updraftplus', true).
 						' - '.
-						$this->url_start(true, 'facebook.com/updraftplus', true). __('Facebook', 'updraftplus'). $this->url_end(true, 'facebook.com/updraftplus', true),
-				'text_plain' => $this->url_start(false, 'twitter.com/updraftplus', true). __('Twitter', 'updraftplus'). $this->url_end(false, 'twitter.com/updraftplus', true).
-						' - '.
-						$this->url_start(false, 'facebook.com/updraftplus', true). __('Facebook', 'updraftplus'). $this->url_end(false, 'facebook.com/updraftplus', true),
+						$this->url_start(true, 'facebook.com/updraftplus', true).__('Facebook', 'updraftplus').$this->url_end(true, 'facebook.com/updraftplus', true),
+				'text_plain' => $this->url_start(false, 'twitter.com/updraftplus', true).__('Twitter', 'updraftplus').$this->url_end(false, 'twitter.com/updraftplus', true).
+						' - '.$this->url_start(false, 'facebook.com/updraftplus', true).__('Facebook', 'updraftplus').$this->url_end(false, 'facebook.com/updraftplus', true),
 				'image' => 'notices/updraft_logo.png',
 				'dismiss_time' => false,
 				'supported_positions' => $this->anywhere,
@@ -179,9 +183,9 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 			'autobackup' => array(
 				'prefix' => '',
 				'title' => __('Make updates easy with UpdraftPlus', 'updraftplus'),
-				'text' => __('Be safe', 'updraftplus') . ' - ' . $this->url_start(true, 'updraftplus.com/shop/updraftplus-premium/') . 'UpdraftPlus Premium' . $this->url_end(true, 'updraftplus.com/shop/updraftplus-premium/') . ' ' . __('backs up automatically when you update plugins, themes or core', 'updraftplus'),
-				'text2' => __('Save time', 'updraftplus') . ' - ' . $this->url_start(true, 'wordpress.org/plugins/stops-core-theme-and-plugin-updates/') . 'Easy Updates Manager' . $this->url_end(true, 'wordpress.org/plugins/stops-core-theme-and-plugin-updates/') . ' ' . __('handles updates automatically as you want them', 'updraftplus'),
-				'text3' => __('Many sites?', 'updraftplus') . ' - ' . $this->url_start(true, 'updraftplus.com/updraftcentral/') . 'UpdraftCentral' . $this->url_end(true, 'updraftplus.com/updraftcentral/') . ' ' . __('manages all your WordPress sites at once from one place', 'updraftplus'),
+				'text' => __('Be safe', 'updraftplus').' - '.$this->url_start(true, 'updraftplus.com/shop/updraftplus-premium/').'UpdraftPlus Premium'.$this->url_end(true, 'updraftplus.com/shop/updraftplus-premium/').' '.__('backs up automatically when you update plugins, themes or core', 'updraftplus'),
+				'text2' => __('Save time', 'updraftplus').' - '.$this->url_start(true, 'wordpress.org/plugins/stops-core-theme-and-plugin-updates/').'Easy Updates Manager'.$this->url_end(true, 'wordpress.org/plugins/stops-core-theme-and-plugin-updates/').' '.__('handles updates automatically as you want them', 'updraftplus'),
+				'text3' => __('Many sites?', 'updraftplus').' - '.$this->url_start(true, 'updraftplus.com/updraftcentral/').'UpdraftCentral'.$this->url_end(true, 'updraftplus.com/updraftcentral/').' '.__('manages all your WordPress sites at once from one place', 'updraftplus'),
 				'image' => 'addons-images/autobackup.png',
 				'button_link' => 'https://updraftplus.com/landing/updraftplus-premium',
 				'campaign' => 'autobackup',
@@ -214,72 +218,67 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 			// The sale adverts content starts here
 			'blackfriday' => array(
 				'prefix' => '',
-				'title' => __('Black Friday - 20% off UpdraftPlus Premium until November 30th', 'updraftplus'),
-				'text' => __('To benefit, use this discount code:', 'updraftplus').' ',
+				'title' => __('Black Friday Sale', 'updraftplus'),
+				'text' => $sale_description.'<br><b>'.__('Get 20% off for a limited time.', 'updraftplus').' '.sprintf(__('Use code %s at %s.', 'updraftplus'), 'blackfridaysale2023', $checkout_html).' '.sprintf(__('Offer ends %s', 'updraftplus'), __('28 November', 'updraftplus')).'</b>',
 				'image' => 'notices/black_friday.png',
 				'button_link' => 'https://updraftplus.com/landing/updraftplus-premium',
 				'campaign' => 'blackfriday',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'blackfridaysale2022',
-				'valid_from' => '2022-11-20 00:00:00',
-				'valid_to' => '2022-11-30 23:59:59',
+				'valid_from' => '2023-11-20 00:00:00',
+				'valid_to' => '2023-11-28 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'newyear' => array(
 				'prefix' => '',
-				'title' => __('Happy New Year - 20% off UpdraftPlus Premium until January 14th', 'updraftplus'),
-				'text' => __('To benefit, use this discount code:', 'updraftplus').' ',
+				'title' => __('New Year Sale', 'updraftplus'),
+				'text' => $sale_description.'<br><b>'.__('Get 20% off for a limited time.', 'updraftplus').' '.sprintf(__('Use code %s at %s.', 'updraftplus'), 'newyearsale2024', $checkout_html).' '.sprintf(__('Offer ends %s', 'updraftplus'), __('14 January', 'updraftplus')).'</b>',
 				'image' => 'notices/new_year.png',
 				'button_link' => 'https://updraftplus.com/landing/updraftplus-premium',
 				'campaign' => 'newyear',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'newyearsale2023',
-				'valid_from' => '2022-12-26 00:00:00',
-				'valid_to' => '2023-01-14 23:59:59',
+				'valid_from' => '2023-12-26 00:00:00',
+				'valid_to' => '2024-01-14 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'spring' => array(
 				'prefix' => '',
-				'title' => __('Spring sale - 20% off UpdraftPlus Premium until May 31st', 'updraftplus'),
-				'text' => __('To benefit, use this discount code:', 'updraftplus').' ',
+				'title' => __('Spring Sale', 'updraftplus'),
+				'text' => $sale_description.'<br><b>'.__('Get 20% off for a limited time.', 'updraftplus').' '.sprintf(__('Use code %s at %s.', 'updraftplus'), 'springsale2023', $checkout_html).' '.sprintf(__('Offer ends %s', 'updraftplus'), __('31 May', 'updraftplus')).'</b>',
 				'image' => 'notices/updraft_logo.png', // TODO: Change image and date back to april/spring next year
 				'button_link' => 'https://updraftplus.com/landing/updraftplus-premium',
 				'campaign' => 'spring',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'springsale2022',
-				'valid_from' => '2022-05-01 00:00:00',
-				'valid_to' => '2022-05-31 23:59:59',
+				'valid_from' => '2023-05-01 00:00:00',
+				'valid_to' => '2023-05-31 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'summer' => array(
 				'prefix' => '',
-				'title' => __('Summer sale - 20% off UpdraftPlus Premium until July 31st', 'updraftplus'),
-				'text' => __('To benefit, use this discount code:', 'updraftplus').' ',
+				'title' => __('Summer Sale', 'updraftplus'),
+				'text' => $sale_description.'<br><b>'.__('Get 20% off for a limited time.', 'updraftplus').' '.sprintf(__('Use code %s at %s.', 'updraftplus'), 'summersale2023', $checkout_html).' '.sprintf(__('Offer ends %s', 'updraftplus'), __('31 July', 'updraftplus')).'</b>',
 				'image' => 'notices/summer.png',
 				'button_link' => 'https://updraftplus.com/landing/updraftplus-premium',
 				'campaign' => 'summer',
 				'button_meta' => 'updraftplus',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'summersale2022',
-				'valid_from' => '2022-07-01 00:00:00',
-				'valid_to' => '2022-07-31 23:59:59',
+				'valid_from' => '2023-07-01 00:00:00',
+				'valid_to' => '2023-07-31 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			),
 			'collection' => array(
 				'prefix' => '',
-				'title' => __('The Updraft Plugin Collection Sale', 'updraftplus'),
-				'text' => __('Get 20% off any of our plugins. But hurry - offer ends 30th September, use this discount code:', 'updraftplus').' ',
+				'title' => __('The UpdraftPlus Plugin Collection Sale', 'updraftplus'),
+				'text' => sprintf(__('Visit any of our websites and <b>use code %s</b> at checkout to get <b>20%% off all our plugins</b>.', 'updraftplus'), 'UDP2023').' '.sprintf(__('Be quick, offer ends %s.', 'updraftplus'), __('30 September', 'updraftplus')),
 				'image' => 'notices/updraft_logo.png',
 				'button_link' => 'https://teamupdraft.com',
 				'campaign' => 'collection',
 				'button_meta' => 'collection',
 				'dismiss_time' => 'dismiss_season',
-				'discount_code' => 'UDP2022',
-				'valid_from' => '2022-09-01 00:00:00',
-				'valid_to' => '2022-09-30 23:59:59',
+				'valid_from' => '2023-09-01 00:00:00',
+				'valid_to' => '2023-09-30 23:59:59',
 				'supported_positions' => $this->dashboard_top_or_report,
 			)
 		);
@@ -318,7 +317,7 @@ class UpdraftPlus_Notices extends Updraft_Notices_1_2 {
 		
 		$backup_dir = $updraftplus->backups_dir_location();
 		// N.B. Not an exact proxy for the installed time; they may have tweaked the expert option to move the directory
-		$installed = @filemtime($backup_dir.'/index.html');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+		$installed = @filemtime($backup_dir.'/index.html');// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged -- Silenced to suppress errors that may arise because of the function.
 		$installed_for = time() - $installed;
 
 		if (!empty($backup_history) && $installed && $installed_for > 28*86400) {

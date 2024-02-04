@@ -46,24 +46,6 @@ class AIOWPSecurity_Captcha {
 			'simple-math' => 'Simple math CAPTCHA'
 		);
 	}
-	
-	/**
-	 * This function will display warning CAPTCHA settings not set.
-	 *
-	 * @global $aio_wp_security;
-	 *
-	 * @return void
-	 */
-	public static function warning_captcha_settings_notset() {
-		global $aio_wp_security;
-		$aiowps_default_captcha = $aio_wp_security->configs->get_value('aiowps_default_captcha');
-		if ('' == $aiowps_default_captcha || 'none' == $aiowps_default_captcha) {
-			$captcha_settings_link = '<a href="admin.php?page='.AIOWPSEC_BRUTE_FORCE_MENU_SLUG.'&tab=captcha-settings" target="_blank">' . __('CAPTCHA settings', 'all-in-one-wp-security-and-firewall') . '</a>';
-			echo '<div class="aio_orange_box"><p>';
-			echo sprintf(__('You should set %s before activating this feature.', 'all-in-one-wp-security-and-firewall'), $captcha_settings_link);
-			echo '</p></div>';
-		}
-	}
 
 	/**
 	 * Enqueues the CAPTCHA script for the default CAPTCHA on the standard WP login page
@@ -201,9 +183,10 @@ class AIOWPSecurity_Captcha {
 	 */
 	public function print_captcha_api_woo() {
 		global $aio_wp_security;
-
-		// We don't want to load for woo account page because we have a special function for this
-		if (function_exists('is_account_page') && !is_account_page()) return;
+		
+		
+		//captcha should only show for woo account and checkout page
+		if ((function_exists('is_account_page') && !is_account_page()) && (function_exists('is_checkout') && !is_checkout())) return;
 
 		$default_captcha = $aio_wp_security->configs->get_value('aiowps_default_captcha');
 
@@ -252,26 +235,6 @@ class AIOWPSecurity_Captcha {
 		<script src='https://www.google.com/recaptcha/api.js?hl=<?php echo $this->get_google_recaptcha_compatible_site_locale(); ?>&onload=onloadCallback&render=explicit' async defer></script>
 		<?php
 		endif;
-	}
-
-	/**
-	 * For cases when a custom wp_login_form() is displayed anywhere on a page, inserts a script element referencing the CAPTCHA API. Only inserts the CAPTCHA script element if the wp login form exists.
-	 *
-	 * @return void
-	 */
-	public function print_captcha_api_custom_login() {
-		global $aio_wp_security;
-
-		$default_captcha = $aio_wp_security->configs->get_value('aiowps_default_captcha');
-
-		switch ($default_captcha) {
-			case 'cloudflare-turnstile':
-			case 'google-recaptcha-v2':
-				wp_enqueue_script($default_captcha, $this->get_captcha_script_url($default_captcha), array(), AIO_WP_SECURITY_VERSION);
-				break;
-			default:
-				break;
-		}
 	}
 
 	/**
@@ -537,12 +500,8 @@ class AIOWPSecurity_Captcha {
 		$trans_handle = sanitize_text_field($_POST['aiowps-captcha-string-info']);
 		if (is_multisite()) {
 			$captcha_string_info_option = get_site_option('aiowps_captcha_string_info_'.$trans_handle);
-			delete_site_option('aiowps_captcha_string_info_'.$trans_handle);
-			delete_site_option('aiowps_captcha_string_info_time_'.$trans_handle);
 		} else {
 			$captcha_string_info_option = get_option('aiowps_captcha_string_info_'.$trans_handle);
-			delete_option('aiowps_captcha_string_info_'.$trans_handle);
-			delete_option('aiowps_captcha_string_info_time_'.$trans_handle);
 		}
 		if ($submitted_encoded_string === $captcha_string_info_option) {
 			return true;
@@ -612,6 +571,9 @@ class AIOWPSecurity_Captcha {
 		
 		if (isset($response['success']) && true == $response['success']) $is_humanoid = true;
 
+		// We did not get a success response so check for the "timeout-or-duplicate" error code because it's possible we have sent this request a second time if another plugin has recalled the WP authentication code and this error code means the captcha has already been solved so return success
+		if (isset($response['error-codes']) && in_array('timeout-or-duplicate', $response['error-codes'])) $is_humanoid = true;
+
 		return $is_humanoid;
 	}
 
@@ -631,6 +593,19 @@ class AIOWPSecurity_Captcha {
 		// Return 2 letter locale code.
 		$locale = explode('-', $locale);
 		return $locale[0];
+	}
+
+	/**
+	 * Verify Cloudflare Turnstile configuration.
+	 *
+	 * @param String $site_key
+	 * @param String $secret_key
+	 *
+	 * @return Boolean
+	 */
+	public function cloudflare_turnstile_verify_configuration($site_key, $secret_key) {
+		if (empty($site_key) || empty($secret_key)) return false;
+		return true;
 	}
 
 	/**

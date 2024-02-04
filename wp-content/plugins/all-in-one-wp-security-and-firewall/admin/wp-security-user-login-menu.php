@@ -35,10 +35,6 @@ class AIOWPSecurity_User_Login_Menu extends AIOWPSecurity_Admin_Menu {
 				'title' => __('Login lockout', 'all-in-one-wp-security-and-firewall'),
 				'render_callback' => array($this, 'render_login_lockout'),
 			),
-			'failed-login-records' => array(
-				'title' => __('Failed login records', 'all-in-one-wp-security-and-firewall'),
-				'render_callback' => array($this, 'render_failed_login_records'),
-			),
 			'force-logout' => array(
 				'title' => __('Force logout', 'all-in-one-wp-security-and-firewall'),
 				'render_callback' => array($this, 'render_force_logout'),
@@ -211,54 +207,16 @@ class AIOWPSecurity_User_Login_Menu extends AIOWPSecurity_Admin_Menu {
 					$aio_wp_security->configs->set_value('aiowps_lockdown_enable_whitelisting', isset($_POST["aiowps_lockdown_enable_whitelisting"]) ? '1' : '', true);
 
 					$this->show_msg_settings_updated();
+					//Recalculate points after the feature status/options have been altered
+					$aiowps_feature_mgr->check_feature_status_and_recalculate_points();
 				}
 			}
 		}
 
-		$aio_wp_security->include_template('wp-admin/user-login/login-lockout.php', false, array('aiowps_feature_mgr' => $aiowps_feature_mgr, 'locked_ip_list' => $locked_ip_list, 'result' => $result));
-	}
+		$aiowps_lockdown_allowed_ip_addresses = isset($_POST['aiowps_lockdown_allowed_ip_addresses']) ? wp_unslash($_POST['aiowps_lockdown_allowed_ip_addresses']) : '';
+		$aiowps_lockdown_allowed_ip_addresses = -1 == $result ? stripslashes($aiowps_lockdown_allowed_ip_addresses) : $aio_wp_security->configs->get_value('aiowps_lockdown_allowed_ip_addresses');
 
-	/**
-	 * Display failed login records.
-	 *
-	 * @global AIO_WP_Security $aio_wp_security
-	 * @global wpdb $wpdb
-	 * @return void
-	 */
-	protected function render_failed_login_records() {
-		global $aio_wp_security, $wpdb;
-		if (isset($_POST['aiowps_delete_failed_login_records'])) {
-			if (!isset($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'aiowpsec-delete-failed-login-records-nonce')) {
-				$aio_wp_security->debug_logger->log_debug("Nonce check failed for delete all failed login records operation.", 4);
-				die('Nonce check failed for delete all failed login records operation.');
-			}
-			$failed_logins_table = AIOWPSEC_TBL_FAILED_LOGINS;
-			// Delete all records from the failed logins table
-			$result = $wpdb->query("truncate $failed_logins_table");
-					
-			if (false === $result) {
-				$aio_wp_security->debug_logger->log_debug("User login feature - Delete all failed login records operation failed.", 4);
-				$this->show_msg_error(__('User login feature - Delete all failed login records operation failed.', 'all-in-one-wp-security-and-firewall'));
-			} else {
-				$this->show_msg_updated(__('All records from the failed logins table were deleted successfully.', 'all-in-one-wp-security-and-firewall'));
-			}
-		}
-
-		include_once 'wp-security-list-login-fails.php'; // For rendering the AIOWPSecurity_List_Table in tab2
-		$failed_login_list = new AIOWPSecurity_List_Login_Failed_Attempts(); // For rendering the AIOWPSecurity_List_Table in tab2
-		
-		if (isset($_REQUEST['action'])) { // Do row action tasks for list table form for failed logins
-			if ($_REQUEST['action'] == 'delete_failed_login_rec') { // Delete link was clicked for a row in list table
-				$nonce = isset($_REQUEST['aiowps_nonce']) ? $_REQUEST['aiowps_nonce'] : '';
-				if (!isset($nonce) || !wp_verify_nonce($nonce, 'delete_failed_login_rec')) {
-					$aio_wp_security->debug_logger->log_debug("Nonce check failed for delete failed login record operation!", 4);
-					die(__('Nonce check failed for delete failed login record operation!','all-in-one-wp-security-and-firewall'));
-				}
-				$failed_login_list->delete_login_failed_records(strip_tags($_REQUEST['failed_login_id']));
-			}
-		}
-
-		$aio_wp_security->include_template('wp-admin/user-login/login-records.php', false, array('failed_login_list' => $failed_login_list));
+		$aio_wp_security->include_template('wp-admin/user-login/login-lockout.php', false, array('aiowps_feature_mgr' => $aiowps_feature_mgr, 'locked_ip_list' => $locked_ip_list, "aiowps_lockdown_allowed_ip_addresses" => $aiowps_lockdown_allowed_ip_addresses));
 	}
 
 	/**
@@ -313,17 +271,8 @@ class AIOWPSecurity_User_Login_Menu extends AIOWPSecurity_Admin_Menu {
 	 */
 	protected function render_account_activity_logs() {
 		global $aio_wp_security;
-		
-		include_once 'wp-security-list-acct-activity.php'; // For rendering the AIOWPSecurity_List_Table in tab4
-		$acct_activity_list = new AIOWPSecurity_List_Account_Activity(); // For rendering the AIOWPSecurity_List_Table in tab2
-		
-		if (isset($_REQUEST['action'])) { // Do row action tasks for list table form for login activity display
-			if ($_REQUEST['action'] == 'delete_acct_activity_rec') { // Delete link was clicked for a row in list table
-				$acct_activity_list->delete_login_activity_records(strip_tags($_REQUEST['activity_login_rec']));
-			}
-		}
 
-		$aio_wp_security->include_template('wp-admin/user-login/account-activity-logs.php', false, array('acct_activity_list' => $acct_activity_list));
+		$aio_wp_security->include_template('wp-admin/general/moved.php', false, array('key' => 'acct_activity_list'));
 	}
 
 	/**
@@ -354,7 +303,10 @@ class AIOWPSecurity_User_Login_Menu extends AIOWPSecurity_Admin_Menu {
 			$user_list->prepare_items();
 		}
 
-		$aio_wp_security->include_template('wp-admin/user-login/logged-in-users.php', false, array('user_list' => $user_list));
+		$page = $_REQUEST['page'];
+		$tab = $_REQUEST["tab"];
+
+		$aio_wp_security->include_template('wp-admin/user-login/logged-in-users.php', false, array('user_list' => $user_list, 'page' => $page, 'tab' => $tab));
 	}
 	
 	/**

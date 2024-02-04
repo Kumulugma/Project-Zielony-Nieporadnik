@@ -10,7 +10,6 @@
 	<?php
 		$tutorial_link = '<a href="https://aiosplugin.com/how-to-use-cookie-based-brute-force-login-attack-prevention-feature/" target="_blank">' . __('tutorial', 'all-in-one-wp-security-and-firewall') . '</a>';
 		$info_msg = sprintf(__('To learn more about how to use this feature, please read the following %s.', 'all-in-one-wp-security-and-firewall'), $tutorial_link);
-		$brute_force_login_feature_link = '<a href="admin.php?page='.AIOWPSEC_FIREWALL_MENU_SLUG.'&tab=tab4" target="_blank">'.__('Cookie-based brute force login prevention', 'all-in-one-wp-security-and-firewall').'</a>';
 		echo '<p>' . $info_msg . '</p>';
 	?>
 </div>
@@ -36,18 +35,18 @@
 			<?php
 				$cookie_test_value = $aio_wp_security->configs->get_value('aiowps_cookie_test_success');
 
-				$disable_brute_force_fetaure_input = true;
+				$disable_brute_force_feature_input = true;
 				// If the cookie test is successful or if the feature is already enabled then go ahead as normal
 				if ('1' == $cookie_test_value || '1' == $aio_wp_security->configs->get_value('aiowps_enable_brute_force_attack_prevention')) {
-					if (isset($_POST['aiowps_cookie_test'])) { // Cookie test was just performed and the test succeded
+					if (!empty($aiowps_cookie_test)) { // Cookie test was just performed and the test succeded
 						echo '<div class="aio_green_box"><p>';
 						_e('The cookie test was successful. You can now enable this feature.', 'all-in-one-wp-security-and-firewall');
 						echo '</p></div>';
 					}
-					$disable_brute_force_fetaure_input = false;
+					$disable_brute_force_feature_input = false;
 				} else {
 					// Cookie test needs to be performed
-					if (isset($_POST['aiowps_cookie_test']) && '1' != $cookie_test_value) { // Test failed
+					if (!empty($aiowps_cookie_test) && '1' != $cookie_test_value) { // Test failed
 						echo '<div class="aio_red_box"><p>';
 						_e('The cookie test failed on this server. Consequently, this feature cannot be used on this site.', 'all-in-one-wp-security-and-firewall');
 						echo '</p></div>';
@@ -71,7 +70,7 @@
 				<tr valign="top">
 					<th scope="row"><?php _e('Enable brute force attack prevention', 'all-in-one-wp-security-and-firewall'); ?>:</th>
 					<td>
-					<input id="aiowps_enable_brute_force_attack_prevention" name="aiowps_enable_brute_force_attack_prevention" type="checkbox"<?php checked($aio_wp_security->configs->get_value('aiowps_enable_brute_force_attack_prevention'));?> value="1"<?php disabled($disable_brute_force_fetaure_input); ?>/>
+					<input id="aiowps_enable_brute_force_attack_prevention" name="aiowps_enable_brute_force_attack_prevention" type="checkbox"<?php checked($aio_wp_security->configs->get_value('aiowps_enable_brute_force_attack_prevention'));?> value="1"<?php disabled($disable_brute_force_feature_input); ?>/>
 						<label for="aiowps_enable_brute_force_attack_prevention" class="description"><?php _e('Check this if you want to protect your login page from Brute Force Attack.', 'all-in-one-wp-security-and-firewall'); ?></label>
 					<span class="aiowps_more_info_anchor"><span class="aiowps_more_info_toggle_char">+</span><span class="aiowps_more_info_toggle_text"><?php _e('More info', 'all-in-one-wp-security-and-firewall'); ?></span></span>
 					<div class="aiowps_more_info_body">
@@ -165,7 +164,7 @@
 				</tr>
 			</table>
 			<?php
-				$other_attributes = $disable_brute_force_fetaure_input ? array('disabled' => 'disabled') : array();
+				$other_attributes = $disable_brute_force_feature_input ? array('disabled' => 'disabled') : array();
 				submit_button(__('Save feature settings', 'all-in-one-wp-security-and-firewall'), 'primary', 'aiowps_apply_cookie_based_bruteforce_firewall', false, $other_attributes);
 			?>
 		</form>
