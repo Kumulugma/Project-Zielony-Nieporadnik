@@ -37,47 +37,58 @@ $blog = new WP_Query($args);
         <?php if ($blog->have_posts()) { ?>
             <div class="col-lg-12 mb-4 mb-lg-0">
                 <div class="row" id="posts-loop">
-                    <?php while ($blog->have_posts()) {
-                        $blog->the_post();
-                        ?>
-                        <div class="col-6 blog-post text-center mb-4">
-                            <div class="blog-post-image">
-                                <a href="<?= get_permalink(get_the_ID()) ?>">
-                                    <?php if (has_post_thumbnail(get_the_ID())): ?>
-                                        <?php $image = wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'news'); ?>
-                                        <img class="lazyload img-fluid" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo $image[0]; ?>" alt="<?php the_title() ?>">
-        <?php endif; ?>
-                                </a>
-                            </div>
-                            <div class="blog-content">
-                                <?php $post_categories = get_the_category(get_the_ID()); ?>
-                                <?php if (is_array($post_categories)) { ?>
-                                    <?php foreach ($post_categories as $category) { ?>
-                                        <a class="badge" href="<?= get_category_link($category) ?>"> <?= $category->name ?> </a>                        
-                                    <?php } ?>
-        <?php } ?>
+<?php while ($blog->have_posts()) {
+    $blog->the_post();
+    $current_post = get_post();
+    ?>
+    <div class="col-6">
+        <?php 
+        // Sprawdź typ postu i wybierz odpowiedni template
+        if ($current_post->post_type === 'plant') {
+            get_template_part('template-parts/blog/plant_content', null, array('data' => $current_post));
+        } else {
+            // Standardowy post - pozostaw oryginalny kod
+        ?>
+            <div class="blog-post text-center mb-4">
+                <div class="blog-post-image">
+                    <a href="<?= get_permalink(get_the_ID()) ?>">
+                        <?php if (has_post_thumbnail(get_the_ID())): ?>
+                            <?php $image = wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'news'); ?>
+                            <img class="lazyload img-fluid" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo $image[0]; ?>" alt="<?php the_title() ?>">
+                        <?php endif; ?>
+                    </a>
+                </div>
+                <div class="blog-content">
+                    <?php $post_categories = get_the_category(get_the_ID()); ?>
+                    <?php if (is_array($post_categories)) { ?>
+                        <?php foreach ($post_categories as $category) { ?>
+                            <a class="badge" href="<?= get_category_link($category) ?>"> <?= $category->name ?> </a>                        
+                        <?php } ?>
+                    <?php } ?>
 
-                                <div class="blog-post-title">
-                                    <h5 class="mb-0"><a href="<?= get_permalink(get_the_ID()) ?>"><?= get_the_title() ?></a></h5>
-                                </div>
-                                <div class="blog-post-footer blog-post-categorise">
-        <?php $author = get_the_author_meta('display_name', $post->post_author); ?>
+                    <div class="blog-post-title">
+                        <h5 class="mb-0"><a href="<?= get_permalink(get_the_ID()) ?>"><?= get_the_title() ?></a></h5>
+                    </div>
+                    <div class="blog-post-footer blog-post-categorise">
+                        <?php $author = get_the_author_meta('display_name', $post->post_author); ?>
 
-
-                                    <div class="blog-post-author">
-                                        <span><img class="lazyload" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?= get_avatar_url($post->post_author) ?>" title="<?= $author ?>" alt="<?= $author ?>"> <?= $author ?></span>
-                                    </div>
-                                    <div class="blog-post-time">
-                                        <a href="<?= get_permalink(get_the_ID()) ?>"><i class="far fa-clock"></i><?= get_the_date() ?></a>
-                                    </div>
-                                </div>
-                                <div class="blog-post-divider">
-                                </div>
-        <?= get_the_excerpt(get_the_ID()->ID) ?> 
-                            </div>
+                        <div class="blog-post-author">
+                            <span><img class="lazyload" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?= get_avatar_url($post->post_author) ?>" title="<?= $author ?>" alt="<?= $author ?>"> <?= $author ?></span>
                         </div>
-
-    <?php } ?>
+                        <div class="blog-post-time">
+                            <a href="<?= get_permalink(get_the_ID()) ?>"><i class="far fa-clock"></i><?= get_the_date() ?></a>
+                        </div>
+                    </div>
+                    <div class="blog-post-divider">
+                    </div>
+                    <?= get_the_excerpt(get_the_ID()->ID) ?> 
+                </div>
+            </div>
+        <?php 
+        } // koniec else
+        ?>
+    </div>
+<?php } ?>
 
                 </div>
             </div>
