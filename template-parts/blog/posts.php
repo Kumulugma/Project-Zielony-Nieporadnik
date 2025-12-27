@@ -1,6 +1,6 @@
 <?php
 $args = array(
-    'post_type' => 'post',
+    'post_type' => array('post', 'plant'),
     'orderby' => 'date',
     'ignore_sticky_posts' => 1,
 );

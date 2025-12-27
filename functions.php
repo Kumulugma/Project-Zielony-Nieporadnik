@@ -14,6 +14,9 @@ include("includes/postViews.php");
 include("includes/cpt-plants.php");
 //Disable Comments
 include("includes/disable-comments.php");
+//Thumbnails Admin
+include("includes/thumbnails-admin.php");
+
 
 
 add_theme_support('post-thumbnails', array('post', 'plant'));

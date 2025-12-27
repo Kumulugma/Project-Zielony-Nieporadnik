@@ -13,7 +13,7 @@ while (have_posts()) : the_post();
 <section class="space-ptb">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <article class="blog-post">
                     
                     <?php if (has_post_thumbnail()): ?>
@@ -67,6 +67,53 @@ while (have_posts()) : the_post();
                         </div>
 
                         <?php
+                        // TIMELINE - Historia i obserwacje
+                        $timeline = get_post_meta(get_the_ID(), '_plant_timeline', true);
+                        if ($timeline && is_array($timeline) && !empty($timeline)):
+                            // Sortuj od najnowszych
+                            usort($timeline, function($a, $b) {
+                                return strtotime($b['date']) - strtotime($a['date']);
+                            });
+                        ?>
+                            <div class="plant-timeline mt-5 pt-4 border-top">
+                                <h4 class="mb-4">
+                                    <i class="fas fa-history me-2" style="color: #719367;"></i>
+                                    Historia i obserwacje
+                                </h4>
+                                
+                                <?php foreach ($timeline as $entry): ?>
+                                    <div class="timeline-item mb-4 pb-4 border-bottom">
+                                        <h5 class="text-muted mb-3">
+                                            <i class="far fa-calendar-alt me-2"></i>
+                                            <?php echo date_i18n('d F Y', strtotime($entry['date'])); ?>
+                                        </h5>
+                                        
+                                        <?php if (!empty($entry['images'])): 
+                                            $image_ids = array_map('trim', explode(',', $entry['images']));
+                                        ?>
+                                            <div class="row mb-3">
+                                                <?php foreach ($image_ids as $img_id): 
+                                                    if (is_numeric($img_id) && $img_id > 0):
+                                                ?>
+                                                    <div class="col-md-3 col-sm-6 mb-3">
+                                                        <?php echo wp_get_attachment_image($img_id, 'medium', false, array('class' => 'img-fluid rounded')); ?>
+                                                    </div>
+                                                <?php 
+                                                    endif;
+                                                endforeach; 
+                                                ?>
+                                            </div>
+                                        <?php endif; ?>
+                                        
+                                        <?php if (!empty($entry['note'])): ?>
+                                            <p class="mb-0"><?php echo nl2br(esc_html($entry['note'])); ?></p>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php
                         // Kategorie i tagi
                         $categories_list = get_the_category_list(', ');
                         $tags_list = get_the_tag_list('', ', ');
@@ -84,10 +131,7 @@ while (have_posts()) : the_post();
                         <?php endif; ?>
                     </div>
                 </article>
-            </div>
-            
-            <div class="col-lg-4">
-                <?php get_sidebar(); ?>
+
             </div>
         </div>
     </div>

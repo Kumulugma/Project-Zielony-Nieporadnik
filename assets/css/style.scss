@@ -89,3 +89,89 @@ NOTE: This is main stylesheet of template, This file contains the styling for th
 .wp-block-column{
     padding: 5px;
 }
+
+/* ====== ROŚLINY - CUSTOM STYLES ====== */
+
+/* Plant Meta Box */
+.plant-meta {
+    background: #f8f9fa;
+    border-left: 4px solid #719367;
+}
+
+.plant-latin {
+    font-size: 0.9em;
+    margin-top: 0.5rem;
+}
+
+/* Plant Status Badge w obrazku */
+.blog-post-image {
+    position: relative;
+}
+
+.plant-status-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 600;
+    z-index: 10;
+}
+
+.plant-status-badge.badge-success {
+    background: #28a745;
+    color: white;
+}
+
+.plant-status-badge.badge-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+/* Plant Filters */
+.plant-filters {
+    margin: 20px 0;
+}
+
+.plant-filters .btn {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+/* Plant Grid Layout */
+@media (max-width: 767px) {
+    .plant-grid .col-md-6 {
+        margin-bottom: 20px;
+    }
+}
+/* ====== PAGINACJA ====== */
+.page-numbers {
+    display: inline-block;
+    padding: 8px 15px;
+    margin: 0 3px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    background: white;
+    transition: all 0.3s;
+}
+
+.page-numbers:hover {
+    background: #719367;
+    color: white;
+    border-color: #719367;
+}
+
+.page-numbers.current {
+    background: #719367;
+    color: white;
+    border-color: #719367;
+    font-weight: bold;
+}
+
+.page-numbers.dots {
+    border: none;
+    background: none;
+}

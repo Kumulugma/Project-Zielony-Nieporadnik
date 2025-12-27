@@ -1,11 +1,7 @@
-<?php
-/**
- * Template Name: Archiwum Bloga
- */
-get_header();
-get_template_part('template-parts/header');
-get_template_part('template-parts/search');
-?>
+<?php /* Template Name: Blog */ ?>
+<?php get_header(); ?>
+<?php get_template_part('template-parts/header'); ?> 
+<?php get_template_part('template-parts/search'); ?> 
 
 <section class="space-ptb bg-light">
     <div class="container">
@@ -28,24 +24,22 @@ get_template_part('template-parts/search');
                     if ($blog_query->have_posts()) :
                         while ($blog_query->have_posts()) : $blog_query->the_post();
                     ?>
-                        <div class="col-md-4 mb-4">
+                        <div class="col-lg-4 col-md-6 mb-4">
                             <?php get_template_part('template-parts/blog/post_content', null, array('data' => $post)); ?>
                         </div>
                     <?php
                         endwhile;
                     ?>
-                        <div class="col-12">
-                            <div class="pagination">
-                                <?php
-                                echo paginate_links(array(
-                                    'total' => $blog_query->max_num_pages,
-                                    'current' => $paged,
-                                    'prev_text' => __('&laquo; Poprzednie'),
-                                    'next_text' => __('Następne &raquo;'),
-                                    'type' => 'list',
-                                ));
-                                ?>
-                            </div>
+                        <div class="col-12 mt-4">
+                            <?php
+                            echo paginate_links(array(
+                                'total' => $blog_query->max_num_pages,
+                                'current' => $paged,
+                                'prev_text' => __('« Poprzednie'),
+                                'next_text' => __('Następne »'),
+                                'mid_size' => 2,
+                            ));
+                            ?>
                         </div>
                     <?php
                         wp_reset_postdata();
@@ -61,8 +55,6 @@ get_template_part('template-parts/search');
     </div>
 </section>
 
-<?php
-get_template_part('template-parts/footer');
-get_template_part('template-parts/to-top');
-get_footer();
-?>
+<?php get_template_part('template-parts/footer'); ?> 
+<?php get_template_part('template-parts/to-top'); ?> 
+<?php get_footer(); ?>

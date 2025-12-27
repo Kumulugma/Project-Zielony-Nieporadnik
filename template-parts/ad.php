@@ -1,71 +1,52 @@
-<?php
-$stickies = get_option('sticky_posts');
-rsort( $stickies );
-$args = array(
-    'post_type' => 'post',
-    'post__in' => $stickies, 
-    'ignore_sticky_posts' => 1
-);
-                        
-$posts = new WP_Query($args);
-?>
 <section class="space-pb bg-light">
     <div class="container">
         <div class="row">
-            <div class="col-md-4 mb-4 mb-md-0">
-                <div class="advertise bg-overlay-black-50 bg-holder text-center h-100 align-items-center" style="background-image: url(<?= get_template_directory_uri() ?>/assets/images/about/05.jpg);">
-                    <a href="https://carni24.zasobnik.be"><img class="img-fluid lazyload" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?= get_template_directory_uri() ?>/assets/images/ads/ad.png" alt="Reklama"></a>
-                </div>
-            </div>
-            <div class="col-md-8">
+            <div class="col-12">
                 <div class="bg-white p-4">
-                    <h6 class="widget-title text-uppercase fw-bolder">Polecane wpisy</h6>
-                    <div class="blog-sidebar-post-divider mb-4">
-                    </div>
-                    <div class="owl-carousel blog-arrow" data-nav-arrow="true" data-nav-dots="false" data-items="2" data-md-items="2" data-sm-items="2" data-xs-items="1" data-xx-items="1" data-space="15">
+                    <h6 class="widget-title text-uppercase fw-bolder">Przeglądaj rośliny po grupach</h6>
+                    <div class="blog-sidebar-post-divider mb-4"></div>
+                    
+                    <div class="row">
                         <?php
-                        if ($posts->have_posts()) {
-                            ?>
-
-                            <?php
-                            while ($posts->have_posts()) {
-                                $posts->the_post();
-                                ?>
-                                <div class="item">
-                                    <div class="blog-post text-center p-0">
-                                        <div class="blog-post-image">
-                                            <?php if (has_post_thumbnail(get_the_ID())): ?>
-                                                <?php $image = wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'sticky'); ?>
-                                                <img class="img-fluid mx-auto lazyload" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?php echo $image[0]; ?>" alt="<?php the_title() ?>">
-                                            <?php endif; ?>
-                                        </div>
-                                        <div class="blog-content">
-                                            <?php $post_categories = get_the_category($current_post); ?>
-                                            <?php if (is_array($post_categories)) { ?>
-                                                <?php foreach ($post_categories as $category) { ?>
-                                                    <a class="badge" href="<?= get_category_link($category) ?>"> <?= $category->name ?> </a>                        
-                                                <?php } ?>
-                                            <?php } ?>
-                                            <div class="blog-post-title">
-                                                <h6 class="mb-0"><a href="<?= get_permalink(get_the_ID()) ?>"><?= get_the_title() ?></a></h6>
+                        $plant_groups = get_terms(array(
+                            'taxonomy' => 'plant-group',
+                            'hide_empty' => true,
+                        ));
+                        
+                        foreach ($plant_groups as $group):
+                            $group_thumbnail = get_plant_group_thumbnail($group->term_id, 'medium');
+                        ?>
+                            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                                <a href="<?php echo get_term_link($group); ?>" class="group-card text-decoration-none d-block">
+                                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                                        <?php if ($group_thumbnail): ?>
+                                            <img src="<?php echo esc_url($group_thumbnail); ?>" class="card-img-top" alt="<?php echo $group->name; ?>" style="height: 150px; object-fit: cover;">
+                                        <?php else: ?>
+                                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
+                                                <i class="fas fa-leaf fa-3x text-muted"></i>
                                             </div>
-                                            <div class="blog-post-footer blog-post-categorise">
-                                                <div class="blog-post-time">
-                                                    <a href="<?= get_permalink(get_the_ID()) ?>"><i class="far fa-clock"></i><?= get_the_date() ?></a>
-                                                </div>
-                                            </div>
+                                        <?php endif; ?>
+                                        <div class="card-body text-center">
+                                            <h6 class="mb-1"><?php echo $group->name; ?></h6>
+                                            <small class="text-muted"><?php echo $group->count; ?> roślin</small>
                                         </div>
                                     </div>
-                                </div>
-                                <?php
-                            }
-                            wp_reset_postdata();
-                        }
-                        ?>
-
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+.hover-lift {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+}
+</style>

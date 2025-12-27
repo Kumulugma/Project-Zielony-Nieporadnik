@@ -34,7 +34,7 @@
             global $wp_query;
             $wp_query = new WP_Query(array(
                 'post_type' => 'plant',
-                'posts_per_page' => 12,
+                'posts_per_page' => get_option('posts_per_page'),
                 'paged' => get_query_var('paged'),
                 'meta_query' => array(
                     array(

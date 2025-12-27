@@ -4,7 +4,7 @@ $args['paged'] = $_POST['page'] + 1; // we need next page to be loaded
 $args['post_status'] = 'publish';
 $postsPerPage = get_option('posts_per_page');
 $postOffset = ($args['paged'] * $postsPerPage) - $postsPerPage;
-$args['post_type'] = 'post';
+$args['post_type'] = array('post', 'plant');
 
 $args['posts_per_page'] = $postsPerPage;
 $args['offset'] = $postOffset;
