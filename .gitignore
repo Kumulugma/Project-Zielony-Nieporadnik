@@ -1,87 +1,56 @@
-# OS generated files
-.DS_Store
-ehthumbs.db
-Thumbs.db
-.Trashes
+# Yii Runtime
+/runtime/*
+!/runtime/.gitkeep
 
-# Compiled files
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
-
-# Packaged files
-*.7z
-*.dmg
-*.gz
-*.iso
-*.jar
-*.rar
-*.tar
-*.zip
-
-# Editor files
-*.sublime-project
-*.sublime-workspace
-*.komodoproject
-.idea/
-nbproject/
-
-# Environment files
-.env
-web.config
-
-# Log files
-*.log
-wp-content/wflogs/
-
-# Dump database files
-*.sql
-*.sqlite
-
-# SEO
-/readme*html
-/robots.txt
-/google*.html
-/sitemap.xml
-
-# Img
-wp-content/webp-express/
-
-# WordPress
-wp-config.php
-wp-content/upgrade/
-wp-content/uploads/
-
-# Dependency files (node/bower/sass etc.)
-.sass-cache/
-node_modules/
-bower_components/
-
-# Backup files
-*.bak
-wp-content/updraft/
-wp-content/backup-db/
-wp-content/backups/
-wp-content/aiowps_backups/
-wp-content/envato-backups/
-wp-content/ai1wm-backups/
-
-# Cache files
-wp-content/cache/
-wp-content/wp-rocket-config/
-wp-content/plugins/bwp-minify/cache/
-wp-content/wp-cache-config.php
-wp-content/advanced-cache.php
-wp-content/object-cache.php
-
-# WPML files
-wp-content/languages/wpml/
-
-# Custom files
+# Composer
 /vendor
+composer.lock
 
-# Antivirus
-wp-includes/js/wp-emoji-release.min.js
+# Environment files - NIGDY NIE COMMITUJ
+.env
+.env.local
+.env.*.local
+
+# Database configuration - zawiera hasła
+/config/db.php
+
+# User uploaded files
+/web/uploads/*
+!/web/uploads/.gitkeep
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+/web/assets/*
+!/web/assets/.gitkeep
+
+# Tests
+/tests/_output/*
+/tests/_support/_generated
+
+# Cache
+.sass-cache/
+/web/css/*.map
+/web/js/*.map
+
+# Backups
+*.bak
+*.backup
+*.sql
+*.dump
+
+# Temporary files
+/tmp/*
+!/tmp/.gitkeep
+
+/nbproject/
