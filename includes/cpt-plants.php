@@ -67,6 +67,7 @@ function plant_details_callback($post) {
     
     $latin_name = get_post_meta($post->ID, '_plant_latin_name', true);
     $common_name = get_post_meta($post->ID, '_plant_common_name', true);
+    $plant_code = get_post_meta($post->ID, '_plant_code', true);
     $status = get_post_meta($post->ID, '_plant_status', true);
     $acquisition_date = get_post_meta($post->ID, '_plant_acquisition_date', true);
     
@@ -81,9 +82,14 @@ function plant_details_callback($post) {
             <td><input type="text" id="plant_common_name" name="plant_common_name" value="<?php echo esc_attr($common_name); ?>" class="regular-text"></td>
         </tr>
         <tr>
+            <th><label for="plant_code">Kod rośliny:</label></th>
+            <td><input type="text" id="plant_code" name="plant_code" value="<?php echo esc_attr($plant_code); ?>" class="regular-text" placeholder="np. R001, ALO-23"></td>
+        </tr>
+        <tr>
             <th><label for="plant_status">Status:</label></th>
             <td>
                 <select id="plant_status" name="plant_status">
+                    <option value="">-- Wybierz status --</option>
                     <option value="own" <?php selected($status, 'own'); ?>>Posiadam</option>
                     <option value="lost" <?php selected($status, 'lost'); ?>>Już nie mam</option>
                 </select>
@@ -97,6 +103,7 @@ function plant_details_callback($post) {
     <?php
 }
 
+// Zapisywanie Meta Box
 function save_plant_details($post_id) {
     if (!isset($_POST['plant_details_nonce']) || !wp_verify_nonce($_POST['plant_details_nonce'], 'plant_details_nonce')) {
         return;
@@ -118,6 +125,10 @@ function save_plant_details($post_id) {
         update_post_meta($post_id, '_plant_common_name', sanitize_text_field($_POST['plant_common_name']));
     }
     
+    if (isset($_POST['plant_code'])) {
+        update_post_meta($post_id, '_plant_code', sanitize_text_field($_POST['plant_code']));
+    }
+    
     if (isset($_POST['plant_status'])) {
         update_post_meta($post_id, '_plant_status', sanitize_text_field($_POST['plant_status']));
     }
@@ -128,31 +139,19 @@ function save_plant_details($post_id) {
 }
 add_action('save_post_plant', 'save_plant_details');
 
-// WAŻNE: Wyświetlanie roślin razem z postami na stronie głównej i w archiwach
+// WAŻNE: Wyświetlanie roślin TYLKO w wyszukiwaniu (nie na home, nie w kategoriach)
 function add_plants_to_main_query($query) {
     if (!is_admin() && $query->is_main_query()) {
-        // Strona główna
-        if ($query->is_home()) {
-            $query->set('post_type', array('post', 'plant'));
-        }
-        // Archiwa kategorii (jeśli używasz wspólnych kategorii)
-        if ($query->is_category()) {
-            $query->set('post_type', array('post', 'plant'));
-        }
-        // Archiwa tagów
-        if ($query->is_tag()) {
-            $query->set('post_type', array('post', 'plant'));
-        }
-        // Wyszukiwanie
+        // Rośliny tylko w wyszukiwaniu
         if ($query->is_search()) {
-            $query->set('post_type', array('post', 'plant'));
+            $query->set('post_type', array('post', 'plant', 'plant-relation'));
         }
     }
     return $query;
 }
 add_action('pre_get_posts', 'add_plants_to_main_query');
 
-// Rozszerz wyszukiwanie o meta fields roślin (nazwy łacińskie itp.)
+// Rozszerz wyszukiwanie o meta fields roślin (nazwy łacińskie, kod itp.)
 function extend_search_to_plant_meta($search, $query) {
     global $wpdb;
     
@@ -163,6 +162,7 @@ function extend_search_to_plant_meta($search, $query) {
             $search .= " OR (";
             $search .= "({$wpdb->postmeta}.meta_key = '_plant_latin_name' AND {$wpdb->postmeta}.meta_value LIKE '%" . esc_sql($wpdb->esc_like($search_term)) . "%')";
             $search .= " OR ({$wpdb->postmeta}.meta_key = '_plant_common_name' AND {$wpdb->postmeta}.meta_value LIKE '%" . esc_sql($wpdb->esc_like($search_term)) . "%')";
+            $search .= " OR ({$wpdb->postmeta}.meta_key = '_plant_code' AND {$wpdb->postmeta}.meta_value LIKE '%" . esc_sql($wpdb->esc_like($search_term)) . "%')";
             $search .= ")";
         }
     }
@@ -171,7 +171,6 @@ function extend_search_to_plant_meta($search, $query) {
 }
 add_filter('posts_search', 'extend_search_to_plant_meta', 10, 2);
 
-// Join meta table dla wyszukiwania
 function join_postmeta_for_search($join, $query) {
     global $wpdb;
     
@@ -183,180 +182,13 @@ function join_postmeta_for_search($join, $query) {
 }
 add_filter('posts_join', 'join_postmeta_for_search', 10, 2);
 
-// Usuń duplikaty z wyników wyszukiwania
-function distinct_search_results($distinct, $query) {
+function group_by_post_id($groupby, $query) {
+    global $wpdb;
+    
     if (!is_admin() && $query->is_main_query() && $query->is_search()) {
-        return "DISTINCT";
+        $groupby = "{$wpdb->posts}.ID";
     }
     
-    return $distinct;
+    return $groupby;
 }
-add_filter('posts_distinct', 'distinct_search_results', 10, 2);
-// ====== TIMELINE - HISTORIA ROŚLINY ======
-
-// Dodaj pole Timeline
-function add_plant_timeline_box() {
-    add_meta_box(
-        'plant_timeline',
-        '📅 Timeline - Historia rośliny',
-        'plant_timeline_callback',
-        'plant',
-        'normal',
-        'default'
-    );
-}
-add_action('add_meta_boxes', 'add_plant_timeline_box');
-
-function plant_timeline_callback($post) {
-    wp_nonce_field('plant_timeline_nonce', 'plant_timeline_nonce');
-    
-    $timeline_entries = get_post_meta($post->ID, '_plant_timeline', true);
-    if (!is_array($timeline_entries)) {
-        $timeline_entries = array();
-    }
-    
-    // Sortuj od najnowszych
-    if (!empty($timeline_entries)) {
-        usort($timeline_entries, function($a, $b) {
-            return strtotime($b['date']) - strtotime($a['date']);
-        });
-    }
-    
-    ?>
-    <div style="margin-bottom: 20px; padding: 15px; background: #f0f8ff; border-left: 4px solid #719367;">
-        <p style="margin: 0;"><strong>Jak dodać zdjęcia?</strong></p>
-        <ol style="margin: 10px 0 0 0; padding-left: 20px;">
-            <li>Wgraj zdjęcia do <strong>Biblioteki mediów</strong></li>
-            <li>Kliknij na zdjęcie i skopiuj jego <strong>ID</strong> (liczba w pasku adresu: post=<strong>123</strong>)</li>
-            <li>Wpisz ID zdjęć oddzielone przecinkami: <code>123, 456, 789</code></li>
-        </ol>
-    </div>
-    
-    <div id="timeline-entries">
-        <?php 
-        if (!empty($timeline_entries)):
-            foreach ($timeline_entries as $index => $entry): 
-        ?>
-            <div class="timeline-entry" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; background: #f9f9f9; border-radius: 5px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <strong style="color: #719367;">Wpis #<?php echo ($index + 1); ?></strong>
-                    <button type="button" class="button remove-timeline" style="background: #dc3545; color: white; border: none;">
-                        <span class="dashicons dashicons-trash" style="margin-top: 3px;"></span> Usuń
-                    </button>
-                </div>
-                
-                <p style="margin-bottom: 10px;">
-                    <label><strong>Data:</strong></label><br>
-                    <input type="date" name="timeline_date[]" value="<?php echo esc_attr($entry['date']); ?>" style="width: 100%; padding: 5px;">
-                </p>
-                <p style="margin-bottom: 10px;">
-                    <label><strong>Notatka / Obserwacja:</strong></label><br>
-                    <textarea name="timeline_note[]" rows="4" style="width: 100%; padding: 5px;"><?php echo esc_textarea($entry['note']); ?></textarea>
-                </p>
-                <p style="margin-bottom: 0;">
-                    <label><strong>Zdjęcia (ID oddzielone przecinkami):</strong></label><br>
-                    <input type="text" name="timeline_images[]" value="<?php echo esc_attr($entry['images']); ?>" placeholder="np. 123, 456, 789" style="width: 100%; padding: 5px;">
-                    
-                    <?php if (!empty($entry['images'])): 
-                        $image_ids = array_map('trim', explode(',', $entry['images']));
-                    ?>
-                        <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
-                            <?php foreach ($image_ids as $img_id): 
-                                if (is_numeric($img_id) && $img_id > 0):
-                                    $img = wp_get_attachment_image($img_id, 'thumbnail');
-                                    if ($img):
-                            ?>
-                                <div style="border: 2px solid #ddd; padding: 3px; background: white;">
-                                    <?php echo $img; ?>
-                                </div>
-                            <?php 
-                                    endif;
-                                endif;
-                            endforeach; 
-                            ?>
-                        </div>
-                    <?php endif; ?>
-                </p>
-            </div>
-        <?php 
-            endforeach;
-        else:
-        ?>
-            <p style="color: #666; font-style: italic;">Brak wpisów. Kliknij przycisk poniżej aby dodać pierwszy wpis do timeline.</p>
-        <?php endif; ?>
-    </div>
-    
-    <button type="button" id="add-timeline-entry" class="button button-primary" style="margin-top: 10px;">
-        <span class="dashicons dashicons-plus-alt" style="margin-top: 3px;"></span> Dodaj nowy wpis do timeline
-    </button>
-    
-    <script>
-    jQuery(document).ready(function($) {
-        var entryCount = <?php echo count($timeline_entries); ?>;
-        
-        $('#add-timeline-entry').click(function() {
-            entryCount++;
-            var html = '<div class="timeline-entry" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; background: #f9f9f9; border-radius: 5px;">' +
-                '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">' +
-                '<strong style="color: #719367;">Nowy wpis #' + entryCount + '</strong>' +
-                '<button type="button" class="button remove-timeline" style="background: #dc3545; color: white; border: none;">' +
-                '<span class="dashicons dashicons-trash" style="margin-top: 3px;"></span> Usuń</button>' +
-                '</div>' +
-                '<p style="margin-bottom: 10px;"><label><strong>Data:</strong></label><br>' +
-                '<input type="date" name="timeline_date[]" style="width: 100%; padding: 5px;"></p>' +
-                '<p style="margin-bottom: 10px;"><label><strong>Notatka / Obserwacja:</strong></label><br>' +
-                '<textarea name="timeline_note[]" rows="4" style="width: 100%; padding: 5px;"></textarea></p>' +
-                '<p style="margin-bottom: 0;"><label><strong>Zdjęcia (ID oddzielone przecinkami):</strong></label><br>' +
-                '<input type="text" name="timeline_images[]" placeholder="np. 123, 456, 789" style="width: 100%; padding: 5px;"></p>' +
-                '</div>';
-            $('#timeline-entries').append(html);
-        });
-        
-        $(document).on('click', '.remove-timeline', function() {
-            if (confirm('Czy na pewno chcesz usunąć ten wpis z timeline?')) {
-                $(this).closest('.timeline-entry').fadeOut(300, function() {
-                    $(this).remove();
-                });
-            }
-        });
-    });
-    </script>
-    
-    <style>
-    .timeline-entry:hover {
-        background: #f0f0f0 !important;
-    }
-    </style>
-    <?php
-}
-
-function save_plant_timeline($post_id) {
-    if (!isset($_POST['plant_timeline_nonce']) || !wp_verify_nonce($_POST['plant_timeline_nonce'], 'plant_timeline_nonce')) {
-        return;
-    }
-    
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-        return;
-    }
-    
-    if (!current_user_can('edit_post', $post_id)) {
-        return;
-    }
-    
-    $timeline_entries = array();
-    
-    if (isset($_POST['timeline_date']) && is_array($_POST['timeline_date'])) {
-        foreach ($_POST['timeline_date'] as $index => $date) {
-            if (!empty($date)) {
-                $timeline_entries[] = array(
-                    'date' => sanitize_text_field($date),
-                    'note' => sanitize_textarea_field($_POST['timeline_note'][$index]),
-                    'images' => sanitize_text_field($_POST['timeline_images'][$index])
-                );
-            }
-        }
-    }
-    
-    update_post_meta($post_id, '_plant_timeline', $timeline_entries);
-}
-add_action('save_post_plant', 'save_plant_timeline');
+add_filter('posts_groupby', 'group_by_post_id', 10, 2);

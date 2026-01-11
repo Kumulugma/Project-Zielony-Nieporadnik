@@ -14,7 +14,7 @@
                     $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
                     
                     $blog_query = new WP_Query(array(
-                        'post_type' => 'post',
+                        'post_type' => array('post', 'plant-relation'), // BEZ 'plant'
                         'posts_per_page' => get_option('posts_per_page'),
                         'paged' => $paged,
                         'orderby' => 'date',
@@ -23,9 +23,16 @@
                     
                     if ($blog_query->have_posts()) :
                         while ($blog_query->have_posts()) : $blog_query->the_post();
+                            $current_post = get_post();
                     ?>
                         <div class="col-lg-4 col-md-6 mb-4">
-                            <?php get_template_part('template-parts/blog/post_content', null, array('data' => $post)); ?>
+                            <?php 
+                            if ($current_post->post_type === 'plant-relation') {
+                                get_template_part('template-parts/blog/relation_content', null, array('data' => $current_post));
+                            } else {
+                                get_template_part('template-parts/blog/post_content', null, array('data' => $current_post));
+                            }
+                            ?>
                         </div>
                     <?php
                         endwhile;

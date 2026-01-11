@@ -1,6 +1,6 @@
 <?php
 $args = array(
-    'post_type' => array('post', 'plant'),
+    'post_type' => array('post', 'plant-relation'), // BEZ 'plant' - rośliny tylko w dedykowanych miejscach
     'orderby' => 'date',
     'ignore_sticky_posts' => 1,
 );
@@ -43,11 +43,11 @@ $blog = new WP_Query($args);
     ?>
     <div class="col-6">
         <?php 
-        // Sprawdź typ postu i wybierz odpowiedni template
-        if ($current_post->post_type === 'plant') {
-            get_template_part('template-parts/blog/plant_content', null, array('data' => $current_post));
+        // Relacje mają swój template
+        if ($current_post->post_type === 'plant-relation') {
+            get_template_part('template-parts/blog/relation_content', null, array('data' => $current_post));
         } else {
-            // Standardowy post - pozostaw oryginalny kod
+            // Standardowy post
         ?>
             <div class="blog-post text-center mb-4">
                 <div class="blog-post-image">
@@ -70,11 +70,7 @@ $blog = new WP_Query($args);
                         <h5 class="mb-0"><a href="<?= get_permalink(get_the_ID()) ?>"><?= get_the_title() ?></a></h5>
                     </div>
                     <div class="blog-post-footer blog-post-categorise">
-                        <?php $author = get_the_author_meta('display_name', $post->post_author); ?>
-
-                        <div class="blog-post-author">
-                            <span><img class="lazyload" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?= get_avatar_url($post->post_author) ?>" title="<?= $author ?>" alt="<?= $author ?>"> <?= $author ?></span>
-                        </div>
+                        <!-- USUNIĘTO AUTORA -->
                         <div class="blog-post-time">
                             <a href="<?= get_permalink(get_the_ID()) ?>"><i class="far fa-clock"></i><?= get_the_date() ?></a>
                         </div>
@@ -107,4 +103,3 @@ $blog = new WP_Query($args);
 
 <?php wp_reset_postdata(); ?>
 </div>
-

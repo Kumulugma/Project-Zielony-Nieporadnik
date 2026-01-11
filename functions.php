@@ -16,6 +16,8 @@ include("includes/cpt-plants.php");
 include("includes/disable-comments.php");
 //Thumbnails Admin
 include("includes/thumbnails-admin.php");
+//CPT Relacje
+require_once get_template_directory() . '/includes/cpt-plant-relations.php';
 
 
 

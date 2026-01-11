@@ -6296,3 +6296,47 @@ input[type="radio"]:radio {
     border: none;
     background: none;
 }
+
+/* ====== BADGE ZMNIEJSZONY ====== */
+.plant-status-badge-small {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.75em;
+    font-weight: 600;
+    z-index: 10;
+    min-width: 25px;
+    text-align: center;
+}
+
+.plant-status-badge-small.badge-success {
+    background: #28a745;
+    color: white;
+}
+
+.plant-status-badge-small.badge-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+/* Mniejsze badge dla statusu rośliny w plant-meta */
+.plant-meta .badge {
+    font-size: 0.85rem !important;
+    padding: 4px 10px !important;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+/* Badge w plant_content.php (lista) */
+.plant-status-badge-small {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+}
+
+/* Badge w galerii */
+.gallery-badge .badge {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+}

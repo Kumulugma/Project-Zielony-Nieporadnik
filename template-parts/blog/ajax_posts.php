@@ -4,7 +4,7 @@ $args['paged'] = $_POST['page'] + 1; // we need next page to be loaded
 $args['post_status'] = 'publish';
 $postsPerPage = get_option('posts_per_page');
 $postOffset = ($args['paged'] * $postsPerPage) - $postsPerPage;
-$args['post_type'] = array('post', 'plant');
+$args['post_type'] = array('post', 'plant-relation'); // BEZ 'plant'
 
 $args['posts_per_page'] = $postsPerPage;
 $args['offset'] = $postOffset;
@@ -17,6 +17,15 @@ $posts = new WP_Query($args);
 
     <?php foreach ($posts->posts as $current_post) { ?>
 
+        <?php 
+        // Sprawdź typ postu
+        if ($current_post->post_type === 'plant-relation') {
+            // Użyj template relacji
+            set_query_var('data', $current_post);
+            get_template_part('template-parts/blog/relation_content');
+        } else {
+            // Standardowy post
+        ?>
         <div class="col-6 blog-post text-center mb-4">
             <div class="blog-post-image">
                 <a href="<?= get_permalink($current_post) ?>">
@@ -38,12 +47,7 @@ $posts = new WP_Query($args);
                     <h5 class="mb-0"><a href="<?= get_permalink($current_post) ?>"><?= get_the_title($current_post->ID) ?></a></h5>
                 </div>
                 <div class="blog-post-footer blog-post-categorise">
-                    <?php $author = get_the_author_meta('display_name', $current_post->post_author); ?>
-
-
-                    <div class="blog-post-author">
-                        <span><img class="lazyload" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="<?= get_avatar_url($current_post->post_author) ?>" title="<?= $author ?>" alt="<?= $author ?>"> <?= $author ?></span>
-                    </div>
+                    <!-- USUNIĘTO AUTORA -->
                     <div class="blog-post-time">
                         <a href="<?= get_permalink($current_post) ?>"><i class="far fa-clock"></i><?= get_the_date('',$current_post->ID) ?></a>
                     </div>
@@ -53,6 +57,7 @@ $posts = new WP_Query($args);
                 <?= get_the_excerpt($current_post->ID) ?> 
             </div>
         </div>
+        <?php } // endif ?>
     <?php } ?>
 
 <?php } ?>

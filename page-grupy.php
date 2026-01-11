@@ -4,7 +4,7 @@
 <?php get_template_part('template-parts/search'); ?> 
 
 <section class="space-ptb bg-light">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <header class="text-center mb-5">
@@ -67,6 +67,7 @@
                                     while ($plants_in_group->have_posts()) : 
                                         $plants_in_group->the_post();
                                         $latin_name = get_post_meta(get_the_ID(), '_plant_latin_name', true);
+                                        $plant_code = get_post_meta(get_the_ID(), '_plant_code', true);
                                         $status = get_post_meta(get_the_ID(), '_plant_status', true);
                                     ?>
                                         <li class="plant-item py-3 border-bottom">
@@ -76,79 +77,40 @@
                                                         <a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none">
                                                             <?php the_title(); ?>
                                                         </a>
+                                                        <?php if ($plant_code): ?>
+                                                            <small class="text-muted ms-2">(<?php echo esc_html($plant_code); ?>)</small>
+                                                        <?php endif; ?>
                                                         <?php if ($status === 'own'): ?>
-                                                            <span class="badge bg-success ms-2">✓ Posiadam</span>
-                                                        <?php else: ?>
-                                                            <span class="badge bg-secondary ms-2">Już nie mam</span>
+                                                            <span class="badge bg-success ms-2" style="font-size: 0.75rem; padding: 2px 6px;">✓</span>
+                                                        <?php elseif ($status === 'lost'): ?>
+                                                            <span class="badge bg-secondary ms-2" style="font-size: 0.75rem; padding: 2px 6px;">✗</span>
                                                         <?php endif; ?>
                                                     </h5>
                                                     <?php if ($latin_name): ?>
-                                                        <p class="text-muted mb-0">
-                                                            <em><?php echo esc_html($latin_name); ?></em>
-                                                        </p>
+                                                        <p class="text-muted small mb-0"><em><?php echo esc_html($latin_name); ?></em></p>
                                                     <?php endif; ?>
                                                 </div>
-                                                <div class="col-md-4 text-md-end mt-2 mt-md-0">
-                                                    <a href="<?php the_permalink(); ?>" class="btn btn-sm btn-outline-primary">
-                                                        Zobacz kartę <i class="fas fa-arrow-right ms-1"></i>
+                                                <div class="col-md-4 text-end">
+                                                    <a href="<?php the_permalink(); ?>" class="btn btn-sm btn-outline-secondary">
+                                                        Zobacz szczegóły
                                                     </a>
                                                 </div>
                                             </div>
                                         </li>
                                     <?php endwhile; ?>
+                                    <?php wp_reset_postdata(); ?>
                                 </ul>
                             </div>
-                        <?php else : ?>
-                            <p class="text-muted mb-0">
-                                <em>Brak roślin w tej grupie.</em>
-                            </p>
                         <?php endif; ?>
-                        
-                        <?php wp_reset_postdata(); ?>
                     </div>
                 <?php 
                     endforeach;
-                else :
+                else:
                 ?>
                     <div class="alert alert-info">
                         <p class="mb-0">Nie znaleziono żadnych grup roślin.</p>
                     </div>
                 <?php endif; ?>
-
-                <!-- Podsumowanie na końcu -->
-                <div class="summary-box bg-white p-4 mt-5 rounded shadow-sm text-center">
-                    <?php
-                    $total_plants = wp_count_posts('plant')->publish;
-                    $total_groups = count($plant_groups);
-                    $owned_plants = new WP_Query(array(
-                        'post_type' => 'plant',
-                        'posts_per_page' => -1,
-                        'meta_query' => array(
-                            array(
-                                'key' => '_plant_status',
-                                'value' => 'own',
-                                'compare' => '='
-                            )
-                        ),
-                        'fields' => 'ids'
-                    ));
-                    ?>
-                    <h4 class="mb-4">Podsumowanie kolekcji</h4>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="h2 mb-1" style="color: #719367;"><?php echo $total_groups; ?></div>
-                            <small class="text-muted text-uppercase">Grup roślin</small>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="h2 mb-1" style="color: #719367;"><?php echo $total_plants; ?></div>
-                            <small class="text-muted text-uppercase">Wszystkich roślin</small>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="h2 mb-1" style="color: #719367;"><?php echo $owned_plants->found_posts; ?></div>
-                            <small class="text-muted text-uppercase">Aktualnie posiadam</small>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </div>

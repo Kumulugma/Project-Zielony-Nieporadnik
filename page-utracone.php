@@ -76,6 +76,7 @@
                                 while ($lost_plants->have_posts()) : 
                                     $lost_plants->the_post();
                                     $latin_name = get_post_meta(get_the_ID(), '_plant_latin_name', true);
+                                    $plant_code = get_post_meta(get_the_ID(), '_plant_code', true);
                                     $acquisition_date = get_post_meta(get_the_ID(), '_plant_acquisition_date', true);
                                 ?>
                                     <li class="plant-item py-3 border-bottom">
@@ -86,92 +87,45 @@
                                                     <a href="<?php the_permalink(); ?>" class="text-dark text-decoration-none">
                                                         <?php the_title(); ?>
                                                     </a>
+                                                    <?php if ($plant_code): ?>
+                                                        <small class="text-muted ms-2">(<?php echo esc_html($plant_code); ?>)</small>
+                                                    <?php endif; ?>
+                                                    <span class="badge bg-secondary ms-2" style="font-size: 0.75rem; padding: 2px 6px;">✗</span>
                                                 </h5>
                                                 <?php if ($latin_name): ?>
-                                                    <p class="text-muted mb-0">
-                                                        <em><?php echo esc_html($latin_name); ?></em>
-                                                    </p>
+                                                    <p class="text-muted small mb-0"><em><?php echo esc_html($latin_name); ?></em></p>
                                                 <?php endif; ?>
                                                 <?php if ($acquisition_date): ?>
-                                                    <small class="text-muted">
-                                                        <i class="far fa-calendar me-1"></i>
-                                                        Dodana: <?php echo date_i18n('d.m.Y', strtotime($acquisition_date)); ?>
-                                                    </small>
+                                                    <p class="text-muted small mb-0">Miałem od: <?php echo date_i18n('d.m.Y', strtotime($acquisition_date)); ?></p>
                                                 <?php endif; ?>
                                             </div>
-                                            <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                                            <div class="col-md-4 text-end">
                                                 <a href="<?php the_permalink(); ?>" class="btn btn-sm btn-outline-secondary">
-                                                    Zobacz historię <i class="fas fa-arrow-right ms-1"></i>
+                                                    Zobacz historię
                                                 </a>
                                             </div>
                                         </div>
                                     </li>
                                 <?php endwhile; ?>
+                                <?php wp_reset_postdata(); ?>
                             </ul>
                         </div>
-                        
-                        <?php wp_reset_postdata(); ?>
                     </div>
                 <?php 
-                        endif; // end if has posts
+                        endif;
                     endforeach;
-                endif;
 
-                // Jeśli nie ma żadnych utraconych roślin
-                if (!$has_lost_plants) :
+                    if (!$has_lost_plants):
                 ?>
-                    <div class="alert alert-success text-center">
-                        <i class="fas fa-smile fa-3x mb-3" style="color: #719367;"></i>
-                        <h4>Świetnie!</h4>
-                        <p class="mb-0">Nie ma żadnych utraconych roślin. Wszystkie dobrze się trzymają! 🌱</p>
+                    <div class="alert alert-success">
+                        <p class="mb-0"><i class="fas fa-smile me-2"></i>Świetnie! Wszystkie rośliny nadal są w mojej kolekcji!</p>
                     </div>
-                <?php endif; ?>
-
-                <!-- Podsumowanie -->
-                <?php if ($has_lost_plants) : ?>
-                    <div class="summary-box bg-white p-4 mt-5 rounded shadow-sm text-center">
-                        <?php
-                        $total_plants = wp_count_posts('plant')->publish;
-                        $all_lost = new WP_Query(array(
-                            'post_type' => 'plant',
-                            'posts_per_page' => -1,
-                            'meta_query' => array(
-                                array(
-                                    'key' => '_plant_status',
-                                    'value' => 'lost',
-                                    'compare' => '='
-                                )
-                            ),
-                            'fields' => 'ids'
-                        ));
-                        $owned = new WP_Query(array(
-                            'post_type' => 'plant',
-                            'posts_per_page' => -1,
-                            'meta_query' => array(
-                                array(
-                                    'key' => '_plant_status',
-                                    'value' => 'own',
-                                    'compare' => '='
-                                )
-                            ),
-                            'fields' => 'ids'
-                        ));
-                        ?>
-                        <h4 class="mb-4">Statystyka</h4>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="h2 mb-1 text-secondary"><?php echo $all_lost->found_posts; ?></div>
-                                <small class="text-muted text-uppercase">Utraconych</small>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="h2 mb-1" style="color: #719367;"><?php echo $owned->found_posts; ?></div>
-                                <small class="text-muted text-uppercase">Aktualnie posiadam</small>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="h2 mb-1"><?php echo $total_plants; ?></div>
-                                <small class="text-muted text-uppercase">Łącznie w bazie</small>
-                            </div>
-                        </div>
+                <?php 
+                    endif;
+                else:
+                ?>
+                    <div class="alert alert-info">
+                        <p class="mb-0">Nie znaleziono żadnych grup roślin.</p>
                     </div>
                 <?php endif; ?>
 
